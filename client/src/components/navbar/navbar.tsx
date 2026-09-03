@@ -124,6 +124,12 @@ export default function Navbar() {
           >
             Regler
           </a>
+          <a
+            href="/"
+            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+          >
+            Logga ut
+          </a>
         </div>
       </div>
     </nav>
