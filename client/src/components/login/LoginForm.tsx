@@ -12,7 +12,7 @@ function LoginForm() {
             name="username"
             placeholder="Skriv ditt användernamn"
             alt="Användarnamn"
-            className=" text-center border border-gray-300 rounded-md p-2 px-10"
+            className=" text-center border border-gray-300 rounded-md p-2 px-10  focus:placeholder-transparent"
           />
         </div>
 
@@ -26,7 +26,7 @@ function LoginForm() {
             name="password"
             placeholder="********"
             alt="Lösenord"
-            className=" text-center border border-gray-300 rounded-md p-2 px-10"
+            className=" text-center border border-gray-300 rounded-md p-2 px-10  focus:placeholder-transparent"
           />
         </div>
 
