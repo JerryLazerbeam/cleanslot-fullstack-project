@@ -7,14 +7,14 @@ import Profile from "./pages/profile";
 
 function App() {
   return (
-        <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/rules" element={<Rules />} />
-            <Route path="/booking" element={<Booking />} />
-            <Route path="/booked" element={<Booked />} />
-            <Route path="/profile" element={<Profile />} />
-        </Routes>
-  )
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/rules" element={<Rules />} />
+      <Route path="/booking" element={<Booking />} />
+      <Route path="/booked" element={<Booked />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;

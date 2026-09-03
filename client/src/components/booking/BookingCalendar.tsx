@@ -225,7 +225,7 @@ export default function BookingCalendar() {
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-[1fr_260px] sm:grid-cols-[1fr_280px]">
+      <div className="flex flex-col gap-4">
         {/* Calendar */}
         <div className="p-4 sm:p-8 border-r border-[#D8DEE2]">
           <CalendarGrid
