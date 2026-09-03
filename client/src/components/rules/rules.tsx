@@ -4,7 +4,6 @@ function Rules() {
       <h1 className="pt-10 text-black text-3xl font-bold p-4">
         Tvättstugans regler
       </h1>
-
       <p className="m-8 max-w-2xl text-sm font-semibold">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
