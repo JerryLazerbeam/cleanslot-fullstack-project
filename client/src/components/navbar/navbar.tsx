@@ -79,6 +79,10 @@ export default function Navbar() {
             <a href="/rules" className="text-gray-700 hover:text-gray-400">
               Regler
             </a>
+
+            <a href="/" className="text-gray-700 hover:text-gray-400">
+              Logga ut
+            </a>
           </div>
         </div>
       )}
