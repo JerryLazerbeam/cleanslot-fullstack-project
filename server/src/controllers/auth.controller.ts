@@ -16,3 +16,16 @@ export function login(req: Request, res: Response) {
     message: "Inloggning lyckades",
   });
 }
+export function logout(req: Request, res: Response) {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({
+        message: "Kunde inte logga ut",
+      });
+    }
+
+    res.json({
+      message: "Utloggning lyckades",
+    });
+  });
+}

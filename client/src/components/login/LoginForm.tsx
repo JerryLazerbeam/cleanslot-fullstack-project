@@ -6,33 +6,29 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
 
-    const loginData = {
-      username: username,
-      password: password,
-    };
+  const loginData = {
+    username: username,
+    password: password,
+  };
 
-    //till backend
-  // const response = await fetch("http://localhost:3000/api/login", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(loginData),
-  // });
+  const response = await fetch("http://localhost:3000/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+    credentials: "include",
+  });
 
-  //------------------------------------------------------
-    //tabort console.log när du skickar till backend
-
-    console.log("username:", loginData.username);
-    console.log("password:", "*".repeat(loginData.password.length));
-
-
+  if (response.ok) {
     navigate("/rules");
+  } else {
+    console.log("Inloggningen misslyckades");
   }
-
+}
 
   return (
     <div className=" mt-10">
