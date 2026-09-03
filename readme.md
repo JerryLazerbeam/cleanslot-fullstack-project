@@ -58,3 +58,9 @@ When your done and want to push to Github
 git add .
 git commit -m "..."
 git push -u origin your-branch
+
+Merge to develop branch
+git checkout develop
+git pull origin develop
+git merge your branch
+git push origin develop
