@@ -1,11 +1,10 @@
+import BookingCalendar from "../components/booking/BookingCalendar";
 function Booking() {
   return (
-    <div className="Booking">
-      <h1 className="text-3xl font-bold underline">
-        Booking Page
-      </h1>
+    <div className="display flex justify-center items-center min-h-screen bg-[#f8f9fb]">
+      <BookingCalendar />
     </div>
-  )
+  );
 }
 
-export default Booking
+export default Booking;
