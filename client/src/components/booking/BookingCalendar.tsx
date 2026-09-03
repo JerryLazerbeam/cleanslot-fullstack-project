@@ -225,9 +225,9 @@ export default function BookingCalendar() {
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         {/* Calendar */}
-        <div className="p-4 sm:p-8 border-r border-[#D8DEE2]">
+        <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-[#D8DEE2]">
           <CalendarGrid
             days={days}
             selected={selected}
@@ -241,12 +241,14 @@ export default function BookingCalendar() {
         </div>
 
         {/* Time slots */}
-        <TimeSlots
-          selected={selected}
-          selectedBookings={selectedBookings}
-          isPast={isPast(selected)}
-          onToggleSlot={toggleSlot}
-        />
+        <div className="md:w-80">
+          <TimeSlots
+            selected={selected}
+            selectedBookings={selectedBookings}
+            isPast={isPast(selected)}
+            onToggleSlot={toggleSlot}
+          />
+        </div>
       </div>
     </div>
   );
