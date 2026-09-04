@@ -85,6 +85,10 @@ export default function BookingCalendar() {
   const [selected, setSelected] = useState<Date>(() => new Date());
 
   const [bookings, setBookings] = useState<BookingsByDate>(seedBookings);
+  const [myBooking, setMyBooking] = useState<{
+    date: string;
+    slotId: string;
+  } | null>(null);
 
   const today = useMemo(() => {
     const t = new Date();
@@ -143,11 +147,21 @@ export default function BookingCalendar() {
 
       const current = dayBookings[slotId];
 
+      // Om man klickar på sin redan valda tid → avmarkera den
       if (current === "mig") {
         delete dayBookings[slotId];
       } else if (!current) {
+        // Ta bort eventuell tidigare vald tid
+        Object.keys(dayBookings).forEach((id) => {
+          if (dayBookings[id] === "mig") {
+            delete dayBookings[id];
+          }
+        });
+
+        // Markera den nya tiden
         dayBookings[slotId] = "mig";
       } else {
+        // Tiden är redan bokad av någon annan
         return prev;
       }
 
@@ -155,6 +169,23 @@ export default function BookingCalendar() {
         ...prev,
         [selectedKey]: dayBookings,
       };
+    });
+  }
+  function handleBooking() {
+    const dayBookings = bookings[selectedKey] || {};
+
+    const mySlot = Object.keys(dayBookings).find(
+      (slotId) => dayBookings[slotId] === "mig",
+    );
+
+    if (!mySlot) {
+      alert("Välj en tid först.");
+      return;
+    }
+
+    setMyBooking({
+      date: selectedKey,
+      slotId: mySlot,
     });
   }
 
@@ -238,6 +269,48 @@ export default function BookingCalendar() {
           />
 
           <BookingLegend />
+          {myBooking && (
+            <div className="mt-6 border border-[#D8DEE2] p-4 font-body">
+              <p className="text-xs text-[#5A6B73] mb-1">Din bokade tvättid</p>
+
+              <h2 className="font-display text-lg font-semibold text-[#16242C]">
+                {new Date(myBooking.date).toLocaleDateString("sv-SE", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                })}
+              </h2>
+
+              <p className="text-sm text-[#5A6B73] mt-1">
+                {
+                  SLOT_TEMPLATE.find((slot) => slot.id === myBooking.slotId)
+                    ?.label
+                }
+              </p>
+
+              <button
+                onClick={() => {
+                  // Ta bort bokningen
+                  setBookings((prev) => {
+                    const updatedDay = { ...(prev[myBooking.date] || {}) };
+
+                    delete updatedDay[myBooking.slotId];
+
+                    return {
+                      ...prev,
+                      [myBooking.date]: updatedDay,
+                    };
+                  });
+
+                  // Ta bort informationen om min bokning
+                  setMyBooking(null);
+                }}
+                className="mt-4 border border-red-500 px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+              >
+                Avboka
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Time slots */}
@@ -247,6 +320,7 @@ export default function BookingCalendar() {
             selectedBookings={selectedBookings}
             isPast={isPast(selected)}
             onToggleSlot={toggleSlot}
+            onBook={handleBooking}
           />
         </div>
       </div>

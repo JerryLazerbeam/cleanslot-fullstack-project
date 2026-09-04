@@ -8,6 +8,7 @@ interface TimeSlotsProps {
   selectedBookings: DayBookings;
   isPast: boolean;
   onToggleSlot: (slotId: string) => void;
+  onBook: () => void;
 }
 
 export default function TimeSlots({
@@ -15,6 +16,7 @@ export default function TimeSlots({
   selectedBookings,
   isPast,
   onToggleSlot,
+  onBook,
 }: TimeSlotsProps) {
   return (
     <div className="p-4 sm:p-8 font-body">
@@ -66,10 +68,12 @@ export default function TimeSlots({
         </ul>
       )}
 
-      <p className="text-xs text-[#5A6B73] mt-5 leading-relaxed">
-        Klicka på en ledig tid för att boka den. Klicka igen på din egen bokning
-        för att avboka.
-      </p>
+      <button
+        onClick={onBook}
+        className="rounded-md bg-[#1F5C73] px-6 py-2 text-white  hover:bg-gray-700 shadow-xl mt-4"
+      >
+        Boka
+      </button>
     </div>
   );
 }
