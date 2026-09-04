@@ -23,7 +23,7 @@ function Rules() {
           Visa inte igen
         </label>
       </div>
-      <button className="mt-8 text-white text-lg font-semibold bg-black border rounded-lg focus:border-dark p-3 px-7">
+      <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7">
         Boka tvättid
       </button>
     </div>
