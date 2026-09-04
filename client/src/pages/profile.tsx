@@ -1,11 +1,11 @@
+import PasswordUpdater from "../components/Profile/passwordUppdater";
+
 function Profile() {
   return (
     <div className="Profile">
-      <h1 className="text-3xl font-bold underline">
-        Profile Page
-      </h1>
+      <PasswordUpdater />
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;
