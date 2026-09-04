@@ -35,7 +35,11 @@ export default function Navbar() {
           lg:py-6
         "
       >
-        <h1 className="text-xl font-bold text-gray-800">CleanSlot</h1>
+        <img
+          src="../images/logoclean.png"
+          alt="CleanSlot Logo"
+          className="h-10 w-auto"
+        />
 
         {/* Hamburger - endast mobil */}
         <button

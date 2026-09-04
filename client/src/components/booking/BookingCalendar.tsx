@@ -205,7 +205,7 @@ export default function BookingCalendar() {
           <button
             onClick={() => changeMonth(-1)}
             aria-label="Föregående månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#EEF3F6]"
+            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#1F5C73]"
           >
             <ChevronLeft size={18} />
           </button>
@@ -217,7 +217,7 @@ export default function BookingCalendar() {
           <button
             onClick={() => changeMonth(1)}
             aria-label="Nästa månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#EEF3F6]"
+            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#1F5C73]"
           >
             <ChevronRight size={18} />
           </button>
