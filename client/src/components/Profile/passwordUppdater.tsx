@@ -1,4 +1,3 @@
-import Logo from "../login/logo";
 import { SquarePen } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -21,11 +20,6 @@ function PasswordUpdater() {
   return (
     <main>
       <section>
-        <div className=" flex justify-start px-8">
-          <Logo small />
-        </div>
-
-        <hr className=" border-gray-400/20 my-8" />
 
         <h1 className="mt-8 text-center text-4xl font-bold">Din profil</h1>
         <section className="flex flex-col items-center gap-6">
