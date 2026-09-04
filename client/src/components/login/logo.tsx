@@ -1,17 +1,12 @@
-import { Sparkles } from "lucide-react";
-
-type LogoProps = {
-  small?: boolean;
-};
-
-function Logo({ small = false }: LogoProps) {
+function Logo() {
   return (
     <a href="/">
-      <div
-        className={`flex items-center justify-center flex-col mt-8 ${small ? "text-3xl" : "text-5xl"} font-bold `}
-      >
-        <Sparkles className=" text-yellow-400" />
-        <h1>CleanSlot</h1>
+      <div className="flex items-center justify-center flex-col mt-8 text-5xl font-bold ">
+        <img
+          src="../images/logoclean.png"
+          alt="CleanSlot Logo"
+          className="h-16 w-auto"
+        />
       </div>
     </a>
   );

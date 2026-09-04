@@ -14,25 +14,21 @@ function LoginForm() {
       password: password,
     };
 
-    //till backend
-  // const response = await fetch("http://localhost:3000/api/login", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(loginData),
-  // });
+    const response = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+      credentials: "include",
+    });
 
-  //------------------------------------------------------
-    //tabort console.log när du skickar till backend
-
-    console.log("username:", loginData.username);
-    console.log("password:", "*".repeat(loginData.password.length));
-
-
-    navigate("/rules");
+    if (response.ok) {
+      navigate("/rules");
+    } else {
+      console.log("Inloggningen misslyckades");
+    }
   }
-
 
   return (
     <div className=" mt-10">
@@ -76,7 +72,7 @@ function LoginForm() {
 
         <button
           type="submit"
-          className=" text-white text-lg font-semibold border px-5 py-1 bg-black hover:bg-gray-700 rounded-md shadow-xl "
+          className=" text-white text-lg font-semibold border px-5 py-1 bg-[#1F5C73] hover:bg-gray-700 rounded-md shadow-xl "
         >
           Logga in
         </button>

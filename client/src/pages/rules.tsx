@@ -1,3 +1,3 @@
-import Rules from '../components/rules/rules';
+import Rules from "../components/rules/rules";
 
 export default Rules;

@@ -35,7 +35,11 @@ export default function Navbar() {
           lg:py-6
         "
       >
-        <h1 className="text-xl font-bold text-gray-800">CleanSlot</h1>
+        <img
+          src="../images/logoclean.png"
+          alt="CleanSlot Logo"
+          className="h-10 w-auto"
+        />
 
         {/* Hamburger - endast mobil */}
         <button
@@ -79,6 +83,10 @@ export default function Navbar() {
             <a href="/rules" className="text-gray-700 hover:text-gray-400">
               Regler
             </a>
+
+            <a href="/" className="text-gray-700 hover:text-gray-400">
+              Logga ut
+            </a>
           </div>
         </div>
       )}
@@ -119,6 +127,12 @@ export default function Navbar() {
             className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
           >
             Regler
+          </a>
+          <a
+            href="/"
+            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+          >
+            Logga ut
           </a>
         </div>
       </div>
