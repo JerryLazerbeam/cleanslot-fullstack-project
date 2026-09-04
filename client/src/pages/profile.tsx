@@ -1,3 +1,9 @@
+import PasswordUpdater from "../components/Profile/passwordUppdater";
+
+function Profile() {
+  return (
+    <div className="Profile">
+      <PasswordUpdater />
 import Navbar from "../components/navbar/navbar";
 function Profile() {
   return (
