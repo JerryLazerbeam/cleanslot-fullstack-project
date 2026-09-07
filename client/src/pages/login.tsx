@@ -1,40 +1,18 @@
+import LoginForm from "../components/login/LoginForm";
+import Logo from "../components/login/logo";
+import Footer from "../components/login/footer";
+
 function Login() {
   return (
-      <div>
-        <img src="/images/logo.png"
-         alt="CleanSlot" 
-        className="mx-auto my-8 w-48 h-48"
-        />
-    
-        
-    
-      <form className="flex items-center justify-center flex-col gap-4 mt-8">
-        <div className="items-center justify-center flex-col" >
-          <label htmlFor="email">E-post</label>
-          <input 
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-            type="email"
-            id="email"
-            name="email"
-            
-          />
-        </div>
+    <div className="flex flex-col min-h-screen ">
+      <main className="flex-1 flex flex-col items-center justify-center">
+        <Logo />
+        <LoginForm />
+      </main>
 
-        <div>
-          <label htmlFor="password">Lösenord</label>
-          <input
-           className="border border-gray-300 rounded-md px-4 py-2 w-full"
-            type="password"
-            id="password"
-            name="password"
-            
-          />
-        </div>
-
-        <button className=" text-white text-lg font-semibold bg-black border rounded-lg focus:border-dark p-3 px-7">Logga in</button>  
-      </form>
-  </div>
+      <Footer />
+    </div>
   );
 }
 
-export default Login
+export default Login;

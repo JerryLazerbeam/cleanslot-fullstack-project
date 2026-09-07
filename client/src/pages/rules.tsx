@@ -1,3 +1,13 @@
-import Rules from '../components/rules/rules';
+import Rules from "../components/rules/rulesComponent";
+import Navbar from "../components/navbar/navbar";
 
-export default Rules;
+function RulesPage() {
+  return (
+    <>
+      <Navbar />
+      <Rules />
+    </>
+  );
+}
+
+export default RulesPage;
