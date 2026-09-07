@@ -1,24 +1,25 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-export default function Navbar() {
+type NavBarProps = {
+  hideDesktopSidebar?: boolean;
+};
+
+export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav
-      className="
+      className={`
         bg-white
         border-b border-gray-200
-
-        lg:fixed
-        lg:left-0
-        lg:top-0
-        lg:h-screen
-        lg:w-64
-        lg:border-b-0
-        lg:border-r
-        lg:z-50
-      "
+    
+        ${
+          !hideDesktopSidebar
+            ? "lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64 lg:border-b-0 lg:border-r lg:z-50"
+            : ""
+        }
+      `}
     >
       {/* Header */}
       <div
@@ -38,7 +39,7 @@ export default function Navbar() {
         <img
           src="../images/logoclean.png"
           alt="CleanSlot Logo"
-          className="h-10 w-auto"
+          className='h-10 w-auto'
         />
 
         {/* Hamburger - endast mobil */}
@@ -92,50 +93,52 @@ export default function Navbar() {
       )}
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-col lg:px-6 lg:mt-8">
-        <div className="flex flex-col gap-2">
-          <a
-            href="/profile"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Min profil
-          </a>
+      {!hideDesktopSidebar && (
+        <div className="hidden lg:flex lg:flex-col lg:px-6 lg:mt-8">
+          <div className="flex flex-col gap-2">
+            <a
+              href="/profile"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Min profil
+            </a>
 
-          <a
-            href="/booking"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Boka tvättid
-          </a>
+            <a
+              href="/booking"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Boka tvättid
+            </a>
 
-          <a
-            href="/my-bookings"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Mina bokningar
-          </a>
+            <a
+              href="/my-bookings"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Mina bokningar
+            </a>
 
-          <a
-            href="/complaints"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Felanmälan
-          </a>
+            <a
+              href="/complaints"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Felanmälan
+            </a>
 
-          <a
-            href="/rules"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Regler
-          </a>
-          <a
-            href="/"
-            className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Logga ut
-          </a>
+            <a
+              href="/rules"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Regler
+            </a>
+            <a
+              href="/"
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              Logga ut
+            </a>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
