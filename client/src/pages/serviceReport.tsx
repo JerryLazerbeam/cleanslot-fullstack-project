@@ -41,8 +41,7 @@ function ServiceReport() {
   return (
     <main>
       <form onSubmit={handleSubmit}>
-        <Navbar hideDesktopSidebar />
-
+        <Navbar />
         <section className="px-10 sm:max-w-2xl sm:mx-auto">
           <h1 className="flex justify-center my-4 text-3xl font-bold">
             Felanmälan

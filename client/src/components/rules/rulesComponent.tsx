@@ -23,9 +23,11 @@ function Rules() {
           Visa inte igen
         </label>
       </div>
-      <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7">
-        Boka tvättid
-      </button>
+      <a href="/booking">
+        <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border focus:border-dark p-3 px-7  hover:bg-gray-700 rounded-md shadow-xl ">
+          Boka tvättid
+        </button>
+      </a>
     </div>
   );
 }
