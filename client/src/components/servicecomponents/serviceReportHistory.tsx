@@ -82,7 +82,7 @@ function ServiceReportHistory({ reports = [] }: Props) {
                 <div className="border border-gray-300 rounded-md p-3 mt-2">
                   <p>Maskin: {report.machines.join(", ")}</p>
 
-                  <p className="whitespace-pre-wrap break-words">
+                  <p className="whitespace-pre-wrap">
                     Beskrivning: {report.description}
                   </p>
                 </div>
