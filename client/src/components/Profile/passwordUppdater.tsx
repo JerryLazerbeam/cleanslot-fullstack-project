@@ -20,7 +20,6 @@ function PasswordUpdater() {
   return (
     <main>
       <section>
-
         <h1 className="mt-8 text-center text-4xl font-bold">Din profil</h1>
         <section className="flex flex-col items-center gap-6">
           <div className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 shadow-2xl hover:bg-black/70 transition-colors duration-300 cursor-pointer overflow-hidden mt-10 p-40">
@@ -53,7 +52,7 @@ function PasswordUpdater() {
         <input
           type="text"
           placeholder="Nytt lösenord"
-          className="border rounded-lg p-2 pl-3 mt-4"
+          className="border rounded-md border-gray-500 p-2 pl-3 mt-4"
         ></input>
         <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7">
           Spara
