@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type NavBarProps = {
   hideDesktopSidebar?: boolean;
@@ -7,6 +8,16 @@ type NavBarProps = {
 
 export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    navigate("/");
+  }
 
   return (
     <nav
@@ -39,7 +50,7 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
         <img
           src="../images/logoclean.png"
           alt="CleanSlot Logo"
-          className='h-10 w-auto'
+          className="h-10 w-auto"
         />
 
         {/* Hamburger - endast mobil */}
@@ -85,9 +96,12 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
               Regler
             </a>
 
-            <a href="/" className="text-gray-700 hover:text-gray-400">
+            <button
+              onClick={handleLogout}
+              className="text-left text-gray-700 hover:text-gray-400"
+            >
               Logga ut
-            </a>
+            </button>
           </div>
         </div>
       )}
@@ -130,12 +144,12 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             >
               Regler
             </a>
-            <a
-              href="/"
-              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100"
+            <button
+              onClick={handleLogout}
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100 text-left"
             >
               Logga ut
-            </a>
+            </button>
           </div>
         </div>
       )}
