@@ -25,7 +25,7 @@ export default function CalendarGrid({
   return (
     <>
       {/* Weekdays */}
-      <div className="grid grid-cols-7 font-body text-xs text-[#5A6B73] mb-2">
+      <div className="grid grid-cols-7 font-body text-xs text-[#5A6B73] mb-2 dark:text-[#C7CED1]">
         {WEEKDAYS.map((weekday) => (
           <div key={weekday} className="text-center py-1">
             {weekday}
@@ -59,7 +59,7 @@ export default function CalendarGrid({
                 "aspect-square relative flex flex-col items-center justify-center font-body text-sm transition-colors",
                 past
                   ? "text-[#C7CED1] cursor-not-allowed"
-                  : "text-[#16242C] hover:bg-[#EEF3F6] cursor-pointer",
+                  : "text-[#16242C] hover:bg-[#EEF3F6] cursor-pointer dark:text-[#C7CED1] dark:hover:bg-[#1F5C73]",
 
                 isSelected ? "bg-[#1F5C73] text-white hover:bg-[#1F5C73]" : "",
 

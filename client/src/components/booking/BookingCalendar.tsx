@@ -223,11 +223,11 @@ export default function BookingCalendar() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#D8DEE2]">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight">
+          <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight dark:text-[#C7CED1]">
             Tvättstugan
           </h1>
 
-          <p className="font-body text-sm text-[#5A6B73] mt-1">
+          <p className="font-body text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
             Välj en dag för att se lediga tider
           </p>
         </div>
@@ -236,19 +236,19 @@ export default function BookingCalendar() {
           <button
             onClick={() => changeMonth(-1)}
             aria-label="Föregående månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#1F5C73]"
+            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors "
           >
             <ChevronLeft size={18} />
           </button>
 
-          <span className="w-36 sm:w-40 text-center text-sm font-medium text-[#16242C]">
+          <span className="w-36 sm:w-40 text-center text-sm font-medium text-[#16242C] dark:text-[#C7CED1]">
             {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
           </span>
 
           <button
             onClick={() => changeMonth(1)}
             aria-label="Nästa månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:bg-[#1F5C73]"
+            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
           >
             <ChevronRight size={18} />
           </button>
@@ -271,9 +271,11 @@ export default function BookingCalendar() {
           <BookingLegend />
           {myBooking && (
             <div className="mt-6 border border-[#D8DEE2] p-4 font-body">
-              <p className="text-xs text-[#5A6B73] mb-1">Din bokade tvättid</p>
+              <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
+                Din bokade tvättid
+              </p>
 
-              <h2 className="font-display text-lg font-semibold text-[#16242C]">
+              <h2 className="font-display text-lg font-semibold text-[#16242C] dark:text-[#C7CED1]">
                 {new Date(myBooking.date).toLocaleDateString("sv-SE", {
                   weekday: "long",
                   day: "numeric",
@@ -281,7 +283,7 @@ export default function BookingCalendar() {
                 })}
               </h2>
 
-              <p className="text-sm text-[#5A6B73] mt-1">
+              <p className="text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
                 {
                   SLOT_TEMPLATE.find((slot) => slot.id === myBooking.slotId)
                     ?.label

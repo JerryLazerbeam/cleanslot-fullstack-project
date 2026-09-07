@@ -6,7 +6,7 @@ function Booking() {
     <>
       <Navbar />
       <main className="lg:ml-64 min-h-screen bg-[#f8f9fb]">
-        <div className="flex justify-center items-center min-h-screen bg-[#f8f9fb]">
+        <div className="flex justify-center items-center min-h-screen bg-[#f8f9fb] dark:bg-[#111C22]">
           <BookingCalendar />
         </div>
       </main>
