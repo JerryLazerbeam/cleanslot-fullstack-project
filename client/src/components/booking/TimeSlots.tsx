@@ -20,16 +20,16 @@ export default function TimeSlots({
 }: TimeSlotsProps) {
   return (
     <div className="p-4 sm:p-8 font-body">
-      <p className="text-xs text-[#5A6B73] mb-1">
+      <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
         {selected.toLocaleDateString("sv-SE", { weekday: "long" })}
       </p>
 
-      <h2 className="font-display text-lg text-[#16242C] font-semibold mb-5">
+      <h2 className="font-display text-lg text-[#16242C] font-semibold mb-5 dark:text-[#C7CED1]">
         {selected.getDate()} {MONTH_NAMES[selected.getMonth()]}
       </h2>
 
       {isPast ? (
-        <p className="text-sm text-[#5A6B73]">
+        <p className="text-sm text-[#5A6B73] dark:text-[#C7CED1]">
           Det går inte att boka en tid som redan passerat.
         </p>
       ) : (
@@ -53,7 +53,7 @@ export default function TimeSlots({
                       ? "border-[#D8DEE2] bg-[#F4F6F7] text-[#B3BCC2] cursor-not-allowed"
                       : isMine
                         ? "border-[#1F5C73] bg-[#1F5C73] text-white"
-                        : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73]",
+                        : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73] dark:text-[#C7CED1] dark:hover:border-[#1F5C73]",
                   ].join(" ")}
                 >
                   <span>{slot.label}</span>

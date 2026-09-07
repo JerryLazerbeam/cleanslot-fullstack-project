@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Menu,
   X,
@@ -8,6 +8,8 @@ import {
   TriangleAlert,
   BookOpen,
   LogOut,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 type NavBarProps = {
@@ -16,6 +18,37 @@ type NavBarProps = {
 
 export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    navigate("/");
+  }
+
+  // Hämtar sparat tema när sidan laddas
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  // Aktiverar mörkt/ljust läge
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  // Byter mellan ljust och mörkt läge
+  function toggleDarkMode() {
+    setDarkMode((prev) => !prev);
+  }
 
   // Bestämmer hur en navigeringslänk ska se ut
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -24,18 +57,20 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
       px-4 py-3
       rounded-md
       transition-all duration-200
+
       ${
         isActive
           ? "bg-[#1F5C73] text-white"
-          : "text-gray-700 hover:bg-gray-100 hover:text-[#1F5C73]"
+          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#1F5C73]"
       }
     `;
 
   return (
     <nav
       className={`
-        bg-white
-        border-b border-gray-200
+        bg-white dark:bg-[#111C22]
+        border-b border-gray-200 dark:border-gray-700
+        transition-colors duration-300
 
         ${
           !hideDesktopSidebar
@@ -63,7 +98,13 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           <img
             src="../images/logoclean.png"
             alt="CleanSlot Logo"
-            className="h-10 w-auto"
+            className="h-10 w-auto block dark:hidden"
+          />
+
+          <img
+            src="../images/CleanSlot-Logo-Darkmode.png"
+            alt="CleanSlot Logo"
+            className="h-10 w-auto hidden dark:block"
           />
         </NavLink>
 
@@ -73,7 +114,11 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           className="
             p-2
             rounded-md
+            text-gray-700
+            dark:text-gray-200
             hover:bg-gray-100
+            dark:hover:bg-gray-800
+            transition-colors
             lg:hidden
           "
           aria-label="Öppna meny"
@@ -86,15 +131,16 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
       <div
         className={`
           overflow-hidden
-          border-t border-gray-200
-          bg-white
+          border-t border-gray-200 dark:border-gray-700
+          bg-white dark:bg-[#111C22]
           lg:hidden
           transition-all
           duration-300
           ease-in-out
+
           ${
             menuOpen
-              ? "max-h-96 opacity-100 translate-y-0"
+              ? "max-h-[500px] opacity-100 translate-y-0"
               : "max-h-0 opacity-0 -translate-y-2"
           }
         `}
@@ -140,8 +186,50 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             <span>Regler</span>
           </NavLink>
 
+          {/* Mörkt läge */}
+          <button
+            onClick={toggleDarkMode}
+            className="
+              flex items-center justify-between
+              px-4 py-3
+              rounded-md
+              text-gray-700 dark:text-gray-200
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              transition-colors
+            "
+          >
+            <div className="flex items-center gap-3">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+            </div>
+
+            {/* Toggle */}
+            <div
+              className={`
+                relative
+                w-11 h-6
+                rounded-full
+                transition-colors duration-300
+                ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+              `}
+            >
+              <div
+                className={`
+                  absolute
+                  top-1
+                  w-4 h-4
+                  rounded-full
+                  bg-white
+                  shadow-sm
+                  transition-transform duration-300
+                  ${darkMode ? "translate-x-6" : "translate-x-1"}
+                `}
+              />
+            </div>
+          </button>
+
           {/* Logga ut */}
-          <div className="border-t border-gray-200 mt-2 pt-2">
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
             <NavLink
               to="/"
               onClick={() => setMenuOpen(false)}
@@ -182,8 +270,58 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
               <span>Regler</span>
             </NavLink>
 
+            {/* Mörkt läge */}
+            <button
+              onClick={toggleDarkMode}
+              className="
+                flex items-center justify-between
+                px-4 py-3
+                rounded-md
+                text-gray-700 dark:text-gray-200
+                hover:bg-gray-100 dark:hover:bg-gray-800
+                transition-colors
+                mt-4
+              "
+            >
+              Regler
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100 text-left"
+            >
+              Logga ut
+            </button>
+              <div className="flex items-center gap-3">
+                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+              </div>
+
+              {/* Toggle */}
+              <div
+                className={`
+                  relative
+                  w-11 h-6
+                  rounded-full
+                  transition-colors duration-300
+                  ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+                `}
+              >
+                <div
+                  className={`
+                    absolute
+                    top-1
+                    w-4 h-4
+                    rounded-full
+                    bg-white
+                    shadow-sm
+                    transition-transform duration-300
+                    ${darkMode ? "translate-x-6" : "translate-x-1"}
+                  `}
+                />
+              </div>
+
             {/* Logga ut */}
-            <div className="border-t border-gray-200 mt-6 pt-4">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-4">
               <NavLink to="/" className={navLinkClass}>
                 <LogOut size={20} />
                 <span>Logga ut</span>
