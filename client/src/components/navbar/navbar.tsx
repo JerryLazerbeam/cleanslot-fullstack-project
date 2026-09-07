@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -18,6 +21,16 @@ type NavBarProps = {
 
 export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    navigate("/");
+  }
 
   // Hämtar sparat tema när sidan laddas
   const [darkMode, setDarkMode] = useState(() => {
@@ -273,6 +286,14 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
                 mt-4
               "
             >
+              Regler
+            </a>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100 text-left"
+            >
+              Logga ut
+            </button>
               <div className="flex items-center gap-3">
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
                 <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
