@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
 import {
   Menu,
   X,
@@ -287,7 +284,7 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
               "
             >
               Regler
-            </a>
+            </button>
             <button
               onClick={handleLogout}
               className="px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100 text-left"
@@ -322,7 +319,6 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
                   `}
                 />
               </div>
-            </button>
 
             {/* Logga ut */}
             <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-4">
