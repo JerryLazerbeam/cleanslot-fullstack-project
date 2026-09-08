@@ -81,7 +81,7 @@ function PasswordUpdater() {
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            className="hidden"
+            className="hidden text-white"
             onChange={handleImageChange}
           />
         </section>
@@ -94,11 +94,11 @@ function PasswordUpdater() {
           placeholder="Nytt lösenord"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="border rounded-lg p-2 pl-3 mt-4"
+          className="border  rounded-lg p-2 pl-3 mt-4"
         ></input>
         <button
           onClick={handlePasswordChange}
-          className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7"
+          className="mt-8 text-white text-lg font-semibold hover:bg-gray-700 bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7"
         >
           Spara
         </button>

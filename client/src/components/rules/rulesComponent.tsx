@@ -1,27 +1,25 @@
 function Rules() {
   return (
-    <div className="min-h-screen flex flex-col items-center dark:bg-[#111C22] dark:text-[#C7CED1] lg:ml-64">
-      <h1 className="pt-10 text-black text-3xl font-bold p-4 dark:text-[#C7CED1]">
+    <div className=" flex flex-col text-center dark:bg-[#111C22] dark:text-[#C7CED1] ">
+      <h1 className=" mt-20 text-black text-3xl font-bold  dark:text-[#C7CED1]">
         Tvättstugans regler
       </h1>
-      <p className="m-8 max-w-2xl text-sm font-semibold">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
+      <p className=" flex-col m-9 font-semibold">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore odio
+        laboriosam officia doloribus id expedita at corrupti, mollitia provident
+        suscipit rerum obcaecati vitae possimus aut ipsam odit inventore
+        assumenda amet. Lorem ipsum dolor sit amet consectetur, adipisicing
+        elit. Quia ut labore repellendus dicta totam vitae doloremque! Nisi
+        distinctio molestias officiis debitis consectetur, sint quidem
+        repudiandae minima architecto, omnis quia ea.
       </p>
-      <div className="flex items-center gap-2">
-        <input type="checkbox" id="rules" />
+
+      <div className="flex justify-center gap-2">
+        <input className="" type="checkbox" id="rules" />
 
         <label
           htmlFor="rules"
-          className="text-sm font-medium text-gray-700 dark:text-[#C7CED1]"
+          className=" text-sm font-medium text-gray-700 dark:text-[#C7CED1]"
         >
           Visa inte igen
         </label>
