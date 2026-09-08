@@ -53,7 +53,7 @@ export default function TimeSlots({
                       ? "border-[#D8DEE2] bg-[#F4F6F7] text-[#B3BCC2] cursor-not-allowed"
                       : isMine
                         ? "border-[#1F5C73] bg-[#1F5C73] text-white"
-                        : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73] dark:text-[#C7CED1] dark:hover:border-[#1F5C73]",
+                        : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73] dark:text-[#C7CED1] dark:border-[#1F5C73] dark:hover:border-[#D8DEE2]",
                   ].join(" ")}
                 >
                   <span>{slot.label}</span>

@@ -207,7 +207,7 @@ export default function BookingCalendar() {
   }
 
   return (
-    <div className="w-full max-w-4xl bg-white-100 border border-[#D8DEE2]">
+    <div className="w-full max-w-4xl bg-white-100 border border-[#1F5C73]">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
@@ -221,7 +221,7 @@ export default function BookingCalendar() {
       `}</style>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#D8DEE2]">
+      <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#1F5C73]">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight dark:text-[#C7CED1]">
             Tvättstugan
@@ -258,7 +258,7 @@ export default function BookingCalendar() {
       {/* Content */}
       <div className="flex flex-col md:flex-row gap-4">
         {/* Calendar */}
-        <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-[#D8DEE2]">
+        <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-[#1F5C73]">
           <CalendarGrid
             days={days}
             selected={selected}
@@ -270,7 +270,7 @@ export default function BookingCalendar() {
 
           <BookingLegend />
           {myBooking && (
-            <div className="mt-6 border border-[#D8DEE2] p-4 font-body">
+            <div className="mt-6 border border-[#1F5C73] p-4 font-body">
               <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
                 Din bokade tvättid
               </p>
