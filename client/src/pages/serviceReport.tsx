@@ -40,10 +40,13 @@ function ServiceReport() {
 
   return (
     <main>
-      <form onSubmit={handleSubmit}>
-        <Navbar />
-        <section className="px-10 sm:max-w-2xl sm:mx-auto">
-          <h1 className="flex justify-center my-4 text-3xl font-bold">
+      <Navbar />
+      <form
+        onSubmit={handleSubmit}
+        className="min-h-screen bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] lg:ml-64"
+      >
+        <section className="px-10 sm:max-w-2xl sm:mx-auto dark:bg-[#111C22] dark:text-[#C7CED1]">
+          <h1 className="flex justify-center pt-4 text-3xl font-bold">
             Felanmälan
           </h1>
 
