@@ -1,11 +1,12 @@
 import Navbar from "../components/navbar/navbar";
+import type { CreateServiceReport } from "../components/servicecomponents/serviceReportTypes";
 import { useState } from "react";
 
 function ServiceReport() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateServiceReport>({
     phone: "",
     email: "",
-    machines: [] as string[],
+    machines: [],
     description: "",
   });
 
@@ -53,6 +54,7 @@ function ServiceReport() {
 
               <input
                 type="tel"
+                required
                 placeholder="Nummer"
                 value={formData.phone}
                 onChange={(e) =>
@@ -67,6 +69,7 @@ function ServiceReport() {
 
               <input
                 type="email"
+                required
                 placeholder="E-post"
                 value={formData.email}
                 onChange={(e) =>
@@ -87,8 +90,8 @@ function ServiceReport() {
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={formData.machines.includes("Tvättmaskin 1")}
-                onChange={() => handleMachineChange("Tvättmaskin 1")}
+                checked={formData.machines.includes("washer-1")}
+                onChange={() => handleMachineChange("washer-1")}
                 className="h-4 w-4"
               />
               Tvättmaskin 1
@@ -96,8 +99,8 @@ function ServiceReport() {
 
             <label className="flex items-center gap-2">
               <input
-                checked={formData.machines.includes("Tvättmaskin 2")}
-                onChange={() => handleMachineChange("Tvättmaskin 2")}
+                checked={formData.machines.includes("washer-2")}
+                onChange={() => handleMachineChange("washer-2")}
                 type="checkbox"
                 className="h-4 w-4"
               />
@@ -106,8 +109,8 @@ function ServiceReport() {
 
             <label className="flex items-center gap-2">
               <input
-                checked={formData.machines.includes("Tvättmaskin 3")}
-                onChange={() => handleMachineChange("Tvättmaskin 3")}
+                checked={formData.machines.includes("washer-3")}
+                onChange={() => handleMachineChange("washer-3")}
                 type="checkbox"
                 className="h-4 w-4"
               />
@@ -116,8 +119,8 @@ function ServiceReport() {
 
             <label className="flex items-center gap-2">
               <input
-                checked={formData.machines.includes("Tvättmaskin 4")}
-                onChange={() => handleMachineChange("Tvättmaskin 4")}
+                checked={formData.machines.includes("washer-4")}
+                onChange={() => handleMachineChange("washer-4")}
                 type="checkbox"
                 className="h-4 w-4"
               />
@@ -130,6 +133,7 @@ function ServiceReport() {
 
             <textarea
               id="description"
+              required
               placeholder="Beskrivning"
               value={formData.description}
               onChange={(e) =>

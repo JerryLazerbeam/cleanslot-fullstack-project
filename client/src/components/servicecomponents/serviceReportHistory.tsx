@@ -1,26 +1,16 @@
 import { useState } from "react";
 import { Mail, MailOpen } from "lucide-react";
-
-type Report = {
-  id: string;
-  machines: string[];
-  description: string;
-  createdAt: string;
-  isRead: boolean;
-};
+import type { ServiceReport } from "./serviceReportTypes";
 
 type Props = {
-  reports?: Report[];
+  reports?: ServiceReport[];
+  onMarkAsRead?: (reportId: string) => void;
 };
 
-function ServiceReportHistory({ reports = [] }: Props) {
+function ServiceReportHistory({ reports = [], onMarkAsRead }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [openReportId, setOpenReportId] = useState<string | null>(null);
-  const [readReportIds, setReadReportIds] = useState<string[]>([]);
-
-  const unreadCount = reports.filter(
-    (report) => !report.isRead && !readReportIds.includes(report.id),
-  ).length;
+  const unreadCount = reports.filter((report) => !report.isRead).length;
 
   const hasReports = reports.length > 0;
   const showReports = hasReports && isOpen;
@@ -66,11 +56,7 @@ function ServiceReportHistory({ reports = [] }: Props) {
                   );
 
                   if (openReportId !== report.id) {
-                    setReadReportIds((previous) =>
-                      previous.includes(report.id)
-                        ? previous
-                        : [...previous, report.id],
-                    );
+                    onMarkAsRead?.(report.id);
                   }
                 }}
                 className="text-left cursor-pointer hover:text-[#1F5C73] transition-colors"
