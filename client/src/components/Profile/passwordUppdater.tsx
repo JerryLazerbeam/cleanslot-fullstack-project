@@ -8,6 +8,7 @@ import {
 
 function PasswordUpdater() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewUrlRef = useRef<string | null>(null);
   const [preview, setPreview] = useState("/images/user.svg");
   const [newPassword, setNewPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -16,7 +17,6 @@ function PasswordUpdater() {
     getProfile().then((data) => {
       setUsername(data.username);
     });
-
     fetch("http://localhost:3000/api/users/profile-image", {
       credentials: "include",
     }).then((response) => {
@@ -25,7 +25,13 @@ function PasswordUpdater() {
       }
     });
   }, []);
-
+    useEffect(() => {
+      return () => {
+        if (previewUrlRef.current) {
+          URL.revokeObjectURL(previewUrlRef.current);
+        }
+      };
+    }, []);
   function handleImageClick() {
     fileInputRef.current?.click();
   }
@@ -36,7 +42,13 @@ function PasswordUpdater() {
       return;
     }
 
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+    }
+
     const imageUrl = URL.createObjectURL(file);
+
+    previewUrlRef.current = imageUrl;
     setPreview(imageUrl);
 
     try {
