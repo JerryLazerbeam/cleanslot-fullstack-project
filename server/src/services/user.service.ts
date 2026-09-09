@@ -43,15 +43,35 @@ export function updateProfileImage(
 }
 export function getProfileImage(userId: number) {
   const user = db
-    .prepare(`
+    .prepare(
+      `
       SELECT profile_image, profile_image_type
       FROM users
       WHERE user_id = ?
-    `)
+    `,
+    )
     .get(userId) as
     | {
         profile_image: Buffer | null;
         profile_image_type: string | null;
+      }
+    | undefined;
+
+  return user;
+}
+
+export function getUserOrganization(userId: number) {
+  const user = db
+    .prepare(
+      `
+      SELECT organization_id
+      FROM users
+      WHERE user_id = ?
+    `,
+    )
+    .get(userId) as
+    | {
+        organization_id: number;
       }
     | undefined;
 

@@ -1,14 +1,15 @@
 import { Check, X } from "lucide-react";
-import { MONTH_NAMES, SLOT_TEMPLATE } from "./BookingCalendar";
+import { MONTH_NAMES } from "./BookingCalendar";
 
-import type { DayBookings } from "./BookingCalendar";
+import type { DayBookings, Slot } from "./BookingCalendar";
 
 interface TimeSlotsProps {
   selected: Date;
   selectedBookings: DayBookings;
   isPast: boolean;
-  onToggleSlot: (slotId: string) => void;
+  onToggleSlot: (slotId: number) => void;
   onBook: () => void;
+  slots: Slot[];
 }
 
 export default function TimeSlots({
@@ -17,6 +18,7 @@ export default function TimeSlots({
   isPast,
   onToggleSlot,
   onBook,
+  slots,
 }: TimeSlotsProps) {
   return (
     <div className="p-4 sm:p-8 font-body">
@@ -34,7 +36,7 @@ export default function TimeSlots({
         </p>
       ) : (
         <ul className="space-y-2">
-          {SLOT_TEMPLATE.map((slot) => {
+          {slots.map((slot) => {
             const status = selectedBookings[slot.id];
 
             const isMine = status === "mig";
@@ -56,7 +58,7 @@ export default function TimeSlots({
                         : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73] dark:text-[#C7CED1] dark:border-[#1F5C73] dark:hover:border-[#D8DEE2]",
                   ].join(" ")}
                 >
-                  <span>{slot.label}</span>
+                  <span>{slot.startTime}–{slot.endTime}</span>
 
                   {isMine && <Check size={16} />}
 

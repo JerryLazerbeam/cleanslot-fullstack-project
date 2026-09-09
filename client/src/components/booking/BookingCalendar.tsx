@@ -1,8 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarGrid from "./CalendarGrid";
 import TimeSlots from "./TimeSlots";
 import BookingLegend from "./BookingLegend";
+import { getSlots, bookSlot, getBookings } from "../../services/bookingService";
+import { getProfile } from "../../services/userService";
+
 export const MONTH_NAMES = [
   "Januari",
   "Februari",
@@ -19,17 +22,11 @@ export const MONTH_NAMES = [
 ] as const;
 
 export interface Slot {
-  id: string;
-  label: string;
+  id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
 }
-
-export const SLOT_TEMPLATE: Slot[] = [
-  { id: "s1", label: "07:00–10:00" },
-  { id: "s2", label: "10:00–13:00" },
-  { id: "s3", label: "13:00–16:00" },
-  { id: "s4", label: "16:00–19:00" },
-  { id: "s5", label: "19:00–22:00" },
-];
 
 export type BookingOwner = "mig" | "annan";
 export type DayBookings = Record<string, BookingOwner>;
@@ -82,13 +79,125 @@ export default function BookingCalendar() {
     return d;
   });
 
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
   const [selected, setSelected] = useState<Date>(() => new Date());
 
-  const [bookings, setBookings] = useState<BookingsByDate>(seedBookings);
+  const [bookings, setBookings] = useState<BookingsByDate>({});
+
+  const [backendSlots, setBackendSlots] = useState<Slot[]>([]);
+
+  const [backendBookings, setBackendBookings] = useState<
+    {
+      booking_id: number;
+      user_id: number;
+      slot_id: number;
+      date: string;
+      start_time: string;
+      end_time: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    getProfile()
+      .then((data) => {
+        setCurrentUserId(data.userId);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    getBookings()
+      .then((data) => {
+        const backendBookings: BookingsByDate = {};
+
+        data.forEach(
+          (booking: {
+            booking_id: number;
+            user_id: number;
+            slot_id: number;
+            date: string;
+            start_time: string;
+            end_time: string;
+          }) => {
+            if (!backendBookings[booking.date]) {
+              backendBookings[booking.date] = {};
+            }
+
+            const slotId = `s${booking.slot_id}`;
+
+            backendBookings[booking.date][slotId] =
+              booking.user_id === currentUserId ? "mig" : "annan";
+          },
+        );
+
+        console.log("Omvandlade bokningar:", backendBookings);
+
+        setBookings(backendBookings);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [currentUserId]);
+
+  useEffect(() => {
+    getBookings()
+      .then((data) => {
+        console.log("Bokningar från backend:", data);
+        setBackendBookings(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const convertedBookings: BookingsByDate = {};
+
+    backendBookings.forEach((booking) => {
+      if (!convertedBookings[booking.date]) {
+        convertedBookings[booking.date] = {};
+      }
+
+      convertedBookings[booking.date][`s${booking.slot_id}`] = "annan";
+    });
+
+    setBookings(convertedBookings);
+  }, [backendBookings]);
+
   const [myBooking, setMyBooking] = useState<{
     date: string;
     slotId: string;
   } | null>(null);
+
+  useEffect(() => {
+    getSlots()
+      .then((data) => {
+        const slots: Slot[] = data.map(
+          (slot: {
+            slot_id: number;
+            date: string;
+            start_time: string;
+            end_time: string;
+          }) => ({
+            id: slot.slot_id,
+            date: slot.date,
+            startTime: slot.start_time,
+            endTime: slot.end_time,
+          }),
+        );
+
+        console.log("Slots från backend:", slots);
+        setBackendSlots(slots);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const today = useMemo(() => {
     const t = new Date();
@@ -127,6 +236,10 @@ export default function BookingCalendar() {
 
   const selectedBookings = bookings[selectedKey] || {};
 
+  const selectedSlots = backendSlots.filter(
+    (slot) => slot.date === selectedKey,
+  );
+
   const isPast = (d: Date | null): boolean => !!d && d < today;
 
   function changeMonth(delta: number) {
@@ -137,7 +250,7 @@ export default function BookingCalendar() {
     });
   }
 
-  function toggleSlot(slotId: string) {
+  function toggleSlot(slotId: number) {
     if (isPast(selected)) return;
 
     setBookings((prev) => {
@@ -171,7 +284,7 @@ export default function BookingCalendar() {
       };
     });
   }
-  function handleBooking() {
+  async function handleBooking() {
     const dayBookings = bookings[selectedKey] || {};
 
     const mySlot = Object.keys(dayBookings).find(
@@ -183,10 +296,21 @@ export default function BookingCalendar() {
       return;
     }
 
-    setMyBooking({
-      date: selectedKey,
-      slotId: mySlot,
-    });
+    try {
+      await bookSlot(Number(mySlot.replace("s", "")));
+
+      setMyBooking({
+        date: selectedKey,
+        slotId: mySlot,
+      });
+      const updatedBookings = await getBookings();
+      setBackendBookings(updatedBookings);
+
+      alert("Tvättiden är bokad!");
+    } catch (error) {
+      console.error(error);
+      alert("Kunde inte boka tvättiden.");
+    }
   }
 
   function availabilityForDay(d: Date | null): Availability | null {
@@ -199,7 +323,7 @@ export default function BookingCalendar() {
 
     if (bookedCount === 0) return "open";
 
-    if (bookedCount >= SLOT_TEMPLATE.length) {
+    if (bookedCount >= backendSlots.length) {
       return "full";
     }
 
@@ -284,10 +408,13 @@ export default function BookingCalendar() {
               </h2>
 
               <p className="text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
-                {
-                  SLOT_TEMPLATE.find((slot) => slot.id === myBooking.slotId)
-                    ?.label
-                }
+                {(() => {
+                  const slot = backendSlots.find(
+                    (slot) => String(slot.id) === myBooking.slotId,
+                  );
+
+                  return slot ? `${slot.startTime}–${slot.endTime}` : "";
+                })()}
               </p>
 
               <button
@@ -323,6 +450,7 @@ export default function BookingCalendar() {
             isPast={isPast(selected)}
             onToggleSlot={toggleSlot}
             onBook={handleBooking}
+            slots={selectedSlots}
           />
         </div>
       </div>
