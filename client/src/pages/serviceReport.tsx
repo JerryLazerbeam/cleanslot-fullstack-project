@@ -28,25 +28,32 @@ function ServiceReport() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-
     console.log(formData);
   }
 
   return (
-     <main className="">
-        <Navbar />
-        <form
-          onSubmit={handleSubmit}
-          className=" min-h-screen bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] lg:ml-64"
-        >
-          <section className="px-10 sm:max-w-2xl sm:mx-auto dark:bg-[#111C22] dark:text-[#C7CED1]">
-            <h1 className="flex justify-center pt-4 text-3xl font-bold">
-              Felanmälan
-            </h1>
+    <main className="min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
+      <Navbar />
 
-            <section className="mb-9">
-              <div className=" mb-6">
-                <h3 className="mb-2 font-semibold">Telefon*</h3>
+      <form
+        onSubmit={handleSubmit}
+        className="flex-1 lg:ml-64 px-4 py-6 sm:px-6 md:py-10 text-[#16242C] dark:text-[#C7CED1]"
+      >
+        <section className="mx-auto w-full max-w-3xl">
+          <div className="rounded-xl bg-white p-5 shadow-sm dark:bg-[#16242C] sm:p-8">
+            <div className="mb-8 text-center">
+              <h1 className="text-3xl font-bold text-[#16242C] dark:text-[#C7CED1]">
+                Felanmälan
+              </h1>
+
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Fyll i formuläret så återkommer vi så snart som möjligt.
+              </p>
+            </div>
+
+            <section className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block font-medium">Telefon*</label>
 
                 <input
                   type="tel"
@@ -56,12 +63,12 @@ function ServiceReport() {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className=" w-73 sm:w-125 rounded-md border border-gray-300 p-2 focus:placeholder-transparent"
+                  className="w-full rounded-md border border-gray-300 bg-white p-3 outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22]"
                 />
               </div>
 
               <div>
-                <h3 className=" mb-2 font-semibold">E-post*</h3>
+                <label className="mb-2 block font-medium">E-post*</label>
 
                 <input
                   type="email"
@@ -71,61 +78,44 @@ function ServiceReport() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className=" w-73 sm:w-125 rounded-md border border-gray-300 p-2 focus:placeholder-transparent"
+                  className="w-full rounded-md border border-gray-300 bg-white p-3 outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22]"
                 />
               </div>
             </section>
 
-            <hr className="border border-gray-300 sm:hidden"></hr>
-
-            <section className="flex flex-col my-9 gap-10">
-              <h3 className=" sm:flex justify-center font-semibold">
+            <section className="my-8 border-y border-gray-200 py-8 dark:border-gray-700">
+              <h2 className="mb-5 text-lg font-semibold">
                 Vilken maskin gäller felanmälan?
-              </h3>
+              </h2>
 
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.machines.includes("washer-1")}
-                  onChange={() => handleMachineChange("washer-1")}
-                  className="h-4 w-4"
-                />
-                Tvättmaskin 1
-              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  ["washer-1", "Tvättmaskin 1"],
+                  ["washer-2", "Tvättmaskin 2"],
+                  ["washer-3", "Tvättmaskin 3"],
+                  ["washer-4", "Tvättmaskin 4"],
+                ].map(([value, label]) => (
+                  <label
+                    key={value}
+                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-4 transition hover:border-[#1F5C73] dark:border-gray-700"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.machines.includes(value)}
+                      onChange={() => handleMachineChange(value)}
+                      className="h-4 w-4 accent-[#1F5C73]"
+                    />
 
-              <label className="flex items-center gap-2">
-                <input
-                  checked={formData.machines.includes("washer-2")}
-                  onChange={() => handleMachineChange("washer-2")}
-                  type="checkbox"
-                  className="h-4 w-4"
-                />
-                Tvättmaskin 2
-              </label>
-
-              <label className="flex items-center gap-2">
-                <input
-                  checked={formData.machines.includes("washer-3")}
-                  onChange={() => handleMachineChange("washer-3")}
-                  type="checkbox"
-                  className="h-4 w-4"
-                />
-                Tvättmaskin 3
-              </label>
-
-              <label className="flex items-center gap-2">
-                <input
-                  checked={formData.machines.includes("washer-4")}
-                  onChange={() => handleMachineChange("washer-4")}
-                  type="checkbox"
-                  className="h-4 w-4"
-                />
-                Tvättmaskin 4
-              </label>
+                    <span>{label}</span>
+                  </label>
+                ))}
+              </div>
             </section>
 
-            <section className="mb-9">
-              <h3 className=" mb-2 font-semibold">Beskriv ditt fel:</h3>
+            <section>
+              <label htmlFor="description" className="mb-2 block font-medium">
+                Beskriv ditt fel*
+              </label>
 
               <textarea
                 id="description"
@@ -133,23 +123,29 @@ function ServiceReport() {
                 placeholder="Beskrivning"
                 value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                  setFormData({
+                    ...formData,
+                    description: e.target.value,
+                  })
                 }
-                className=" w-73 sm:w-115 pb-20  rounded-md border border-gray-300 p-3 focus:placeholder-transparent"
+                className="min-h-36 w-full resize-y rounded-md border border-gray-300 bg-white p-3 outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22]"
               />
             </section>
-            <div className="flex justify-center">
+
+            <div className="mt-8 flex justify-center sm:justify-end">
               <button
                 type="submit"
-                className=" text-white text-lg font-semibold border px-5 py-1 bg-[#1F5C73] hover:bg-gray-700 rounded-md shadow-xl "
+                className="w-full rounded-lg bg-[#1F5C73] px-8 py-3 text-white transition-colors hover:bg-[#17485A] sm:w-auto"
               >
                 Skicka felanmälan
               </button>
             </div>
-          </section>
-        </form>
-        <Footer />
-      </main>
+          </div>
+        </section>
+      </form>
+
+      <Footer />
+    </main>
   );
 }
 
