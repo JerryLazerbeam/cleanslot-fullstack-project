@@ -3,7 +3,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarGrid from "./CalendarGrid";
 import TimeSlots from "./TimeSlots";
 import BookingLegend from "./BookingLegend";
-import { getSlots, bookSlot, getBookings } from "../../services/bookingService";
+import {
+  getSlots,
+  bookSlot,
+  getBookings,
+  deleteBooking,
+} from "../../services/bookingService";
 import { getProfile } from "../../services/userService";
 
 export const MONTH_NAMES = [
@@ -116,7 +121,11 @@ export default function BookingCalendar() {
 
     getBookings()
       .then((data) => {
-        const backendBookings: BookingsByDate = {};
+        console.log("Bokningar från backend:", data);
+
+        setBackendBookings(data);
+
+        const convertedBookings: BookingsByDate = {};
 
         data.forEach(
           (booking: {
@@ -127,50 +136,30 @@ export default function BookingCalendar() {
             start_time: string;
             end_time: string;
           }) => {
-            if (!backendBookings[booking.date]) {
-              backendBookings[booking.date] = {};
+            if (!convertedBookings[booking.date]) {
+              convertedBookings[booking.date] = {};
             }
 
             const slotId = `s${booking.slot_id}`;
 
-            backendBookings[booking.date][slotId] =
+            convertedBookings[booking.date][slotId] =
               booking.user_id === currentUserId ? "mig" : "annan";
+
+            if (booking.user_id === currentUserId) {
+              setMyBooking({
+                date: booking.date,
+                slotId: slotId,
+              });
+            }
           },
         );
 
-        console.log("Omvandlade bokningar:", backendBookings);
-
-        setBookings(backendBookings);
+        setBookings(convertedBookings);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [currentUserId]);
-
-  useEffect(() => {
-    getBookings()
-      .then((data) => {
-        console.log("Bokningar från backend:", data);
-        setBackendBookings(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    const convertedBookings: BookingsByDate = {};
-
-    backendBookings.forEach((booking) => {
-      if (!convertedBookings[booking.date]) {
-        convertedBookings[booking.date] = {};
-      }
-
-      convertedBookings[booking.date][`s${booking.slot_id}`] = "annan";
-    });
-
-    setBookings(convertedBookings);
-  }, [backendBookings]);
 
   const [myBooking, setMyBooking] = useState<{
     date: string;
@@ -272,16 +261,18 @@ export default function BookingCalendar() {
   function toggleSlot(slotId: number) {
     if (isPast(selected)) return;
 
+    const slotKey = `s${slotId}`;
+
     setBookings((prev) => {
       const dayBookings: DayBookings = {
         ...(prev[selectedKey] || {}),
       };
 
-      const current = dayBookings[slotId];
+      const current = dayBookings[slotKey];
 
-      // Om man klickar på sin redan valda tid → avmarkera den
+      // Om man klickar på sin redan valda tid -> avmarkera den
       if (current === "mig") {
-        delete dayBookings[slotId];
+        delete dayBookings[slotKey];
       } else if (!current) {
         // Ta bort eventuell tidigare vald tid
         Object.keys(dayBookings).forEach((id) => {
@@ -291,7 +282,7 @@ export default function BookingCalendar() {
         });
 
         // Markera den nya tiden
-        dayBookings[slotId] = "mig";
+        dayBookings[slotKey] = "mig";
       } else {
         // Tiden är redan bokad av någon annan
         return prev;
@@ -418,7 +409,8 @@ export default function BookingCalendar() {
                 <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
                   {(() => {
                     const slot = backendSlots.find(
-                      (slot) => String(slot.id) === myBooking.slotId,
+                      (slot) =>
+                        String(slot.id) === myBooking.slotId.replace("s", ""),
                     );
 
                     return slot ? `${slot.startTime}–${slot.endTime}` : "";
@@ -426,7 +418,27 @@ export default function BookingCalendar() {
                 </p>
 
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    console.log("AVBOKA KLICKAD");
+                    const booking = backendBookings.find(
+                      (booking) =>
+                        booking.slot_id ===
+                          Number(myBooking.slotId.replace("s", "")) &&
+                        booking.user_id === currentUserId,
+                    );
+                    if (!booking) {
+                      alert("Kunde inte hitta bokningen");
+                      return;
+                    }
+
+                    await deleteBooking(booking.booking_id);
+
+                    setBackendBookings((prev) =>
+                      prev.filter(
+                        (item) => item.booking_id !== booking.booking_id,
+                      ),
+                    );
+
                     setBookings((prev) => {
                       const updatedDay = {
                         ...(prev[myBooking.date] || {}),

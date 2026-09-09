@@ -4,6 +4,7 @@ import {
   getAvailableSlots,
   createBooking as saveBooking,
   getBookings,
+  deleteBooking as removeBooking,
 } from "../services/booking.service";
 import { getUserOrganization } from "../services/user.service";
 
@@ -72,6 +73,25 @@ export function createBooking(req: Request, res: Response) {
       message: "Användaren hittades inte",
     });
   }
+  const existingBooking = db
+    .prepare(
+      `
+    SELECT booking_id
+    FROM bookings
+    WHERE user_id = ?
+  `,
+    )
+    .get(req.session.userId) as
+    | {
+        booking_id: number;
+      }
+    | undefined;
+
+  if (existingBooking) {
+    return res.status(409).json({
+      message: "Du har redan en bokad tvättid",
+    });
+  }
 
   const slot = db
     .prepare(
@@ -111,4 +131,51 @@ export function createBooking(req: Request, res: Response) {
       message: "Tvättiden är redan bokad",
     });
   }
+}
+export function deleteBooking(req: Request, res: Response) {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      message: "Du måste vara inloggad",
+    });
+  }
+
+  const bookingId = Number(req.params.bookingId);
+
+  if (!bookingId) {
+    return res.status(400).json({
+      message: "Booking ID saknas",
+    });
+  }
+
+  const booking = db
+    .prepare(
+      `
+    SELECT booking_id, user_id
+    FROM bookings
+    WHERE booking_id = ?
+  `,
+    )
+    .get(bookingId) as
+    | {
+        booking_id: number;
+        user_id: number;
+      }
+    | undefined;
+
+  if (!booking) {
+    return res.status(404).json({
+      message: "Bokningen hittades inte",
+    });
+  }
+
+  if (booking.user_id !== req.session.userId) {
+    return res.status(403).json({
+      message: "Du kan inte avboka någon annans bokning",
+    });
+  }
+  removeBooking(bookingId);
+
+  return res.json({
+    message: "Bokningen är avbokad",
+  });
 }
