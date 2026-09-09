@@ -15,6 +15,7 @@ const insertUser = db.prepare(`
 `);
 
 insertUser.run("1", "1", organizationId);
+insertUser.run("2", "2", organizationId);
 
 const insertSlot = db.prepare(`
     INSERT INTO washing_slots (organization_id, date, start_time, end_time)

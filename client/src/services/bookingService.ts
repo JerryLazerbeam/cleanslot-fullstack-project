@@ -38,3 +38,18 @@ export async function bookSlot(slotId: number) {
 
   return response.json();
 }
+export async function deleteBooking(bookingId: number) {
+  const response = await fetch(
+    `http://localhost:3000/api/bookings/${bookingId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Kunde inte avboka tvättiden");
+  }
+
+  return response.json();
+}

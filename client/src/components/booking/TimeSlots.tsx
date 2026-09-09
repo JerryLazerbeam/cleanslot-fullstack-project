@@ -38,7 +38,7 @@ export default function TimeSlots({
       ) : (
         <ul className="space-y-2">
           {slots.map((slot) => {
-            const status = selectedBookings[slot.id];
+            const status = selectedBookings[`s${slot.id}`];
 
             const isMine = status === "mig";
 
