@@ -12,7 +12,7 @@ export default function BookingLegend() {
       </span>
 
       <span className="flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#C7CED1]" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#ff0d00c6]" />
         Fullbokad
       </span>
     </div>

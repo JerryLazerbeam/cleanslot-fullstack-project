@@ -25,13 +25,13 @@ function PasswordUpdater() {
       }
     });
   }, []);
-    useEffect(() => {
-      return () => {
-        if (previewUrlRef.current) {
-          URL.revokeObjectURL(previewUrlRef.current);
-        }
-      };
-    }, []);
+  useEffect(() => {
+    return () => {
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    };
+  }, []);
   function handleImageClick() {
     fileInputRef.current?.click();
   }
@@ -69,51 +69,71 @@ function PasswordUpdater() {
     }
   }
   return (
-    <main>
-      <section>
-        <h1 className="pt-4 text-center text-4xl font-bold">Din profil</h1>
-        <p className="text-center mt-2">Användarnamn: {username}</p>
-        <section className="flex flex-col items-center gap-6">
-          <div className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 shadow-2xl hover:bg-black/70 transition-colors duration-300 cursor-pointer overflow-hidden mt-10 p-40">
-            <img
-              src={preview}
-              alt="Profile Bild"
-              className="absolute inset-0 h-full w-full object-cover opacity-100 group-hover:opacity-0 transition-opacity duration-300"
-            />
+    <main className="bg-[#f8f9fb] px-4 py-6 text-[#16242C] dark:bg-[#111C22] dark:text-[#C7CED1] sm:px-6 md:py-10">
+      <section className="mx-auto w-full max-w-2xl">
+        <div className="rounded-xl bg-white p-5 shadow-sm dark:bg-[#16242C] sm:p-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold sm:text-4xl">Din profil</h1>
 
-            <div
-              onClick={handleImageClick}
-              className="absolute inset-0 flex items-center justify-center bg-black-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            >
-              <SquarePen className="text-white" />
-            </div>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              Användarnamn: {username}
+            </p>
           </div>
 
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className="hidden text-white"
-            onChange={handleImageChange}
-          />
-        </section>
-      </section>
-      <section className="flex flex-col items-center font-semibold text-lg mt-10">
-        <h1>Byt lösenord</h1>
+          <section className="mt-8 flex flex-col items-center">
+            <div
+              onClick={handleImageClick}
+              className="group relative h-36 w-36 cursor-pointer overflow-hidden rounded-full bg-gray-300 shadow-md sm:h-44 sm:w-44"
+            >
+              <img
+                src={preview}
+                alt="Profilbild"
+                className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-40"
+              />
 
-        <input
-          type="text"
-          placeholder="Nytt lösenord"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className="border  rounded-lg p-2 pl-3 mt-4"
-        ></input>
-        <button
-          onClick={handlePasswordChange}
-          className="mt-8 text-white text-lg font-semibold hover:bg-gray-700 bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7"
-        >
-          Spara
-        </button>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
+                <SquarePen className="text-white" size={28} />
+              </div>
+            </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleImageChange}
+            />
+
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+              Klicka på bilden för att byta profilbild
+            </p>
+          </section>
+
+          <section className="mt-10 border-t border-gray-200 pt-8 dark:border-gray-700">
+            <h2 className="text-xl font-semibold">Byt lösenord</h2>
+
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Ange ditt nya lösenord nedan.
+            </p>
+
+            <div className="mt-5 flex flex-col gap-4 sm:flex-row">
+              <input
+                type="password"
+                placeholder="Nytt lösenord"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white p-3 outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22]"
+              />
+
+              <button
+                onClick={handlePasswordChange}
+                className="w-full rounded-lg bg-[#1F5C73] px-8 py-3 text-white transition-colors hover:bg-[#17485A] sm:w-auto"
+              >
+                Spara
+              </button>
+            </div>
+          </section>
+        </div>
       </section>
     </main>
   );

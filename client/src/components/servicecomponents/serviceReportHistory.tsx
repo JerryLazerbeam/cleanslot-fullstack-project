@@ -16,7 +16,7 @@ function ServiceReportHistory({ reports = [], onMarkAsRead }: Props) {
   const showReports = hasReports && isOpen;
 
   return (
-    <div className="border rounded-md border-gray-300 mr-7 ml-7 mt-10 sm:max-w-sm sm:mx-auto">
+    <div className="border rounded-md border-gray-300 mr-7 ml-7  sm:max-w-sm sm:mx-auto">
       <button
         type="button"
         disabled={!hasReports}
