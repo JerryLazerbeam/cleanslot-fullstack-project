@@ -1,33 +1,15 @@
 function Rules() {
   return (
-    <div className="min-h-screen flex flex-col items-center">
-      <h1 className="pt-10 text-black text-3xl font-bold p-4">
+    <div className=" flex flex-col text-center dark:bg-[#111C22] dark:text-[#C7CED1] ">
+      <h1 className=" mt-20 text-black text-3xl font-bold  dark:text-[#C7CED1]">
         Tvättstugans regler
       </h1>
-      <p className="m-8 max-w-2xl text-sm font-semibold">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
+      <p className="m-8 max-w-2xl text-lg font-semibold border rounded-lg p-4 dark:bg-[#16242C] dark:text-[#C7CED1] dark:border-[#1F5C73]">
+        <p>• Respektera din bokade tvättid.</p>
+        <p>• Lämna tvättstugan ren och städad.</p>
+        <p>• Ta bort tvätt och tillhörigheter när din tid är slut.</p>
+        <p>• Felanmäl maskiner som inte fungerar.</p>
       </p>
-      <div className="flex items-center gap-2">
-        <input type="checkbox" id="rules" />
-
-        <label htmlFor="rules" className="text-sm font-medium text-gray-700">
-          Visa inte igen
-        </label>
-      </div>
-      <a href="/booking">
-        <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border focus:border-dark p-3 px-7  hover:bg-gray-700 rounded-md shadow-xl ">
-          Boka tvättid
-        </button>
-      </a>
     </div>
   );
 }

@@ -331,8 +331,9 @@ export default function BookingCalendar() {
   }
 
   return (
-    <div className="w-full max-w-4xl bg-white-100 border border-[#1F5C73]">
-      <style>{`
+    <>
+      <div className="w-full max-w-4xl bg-white-100 border border-[#1F5C73]">
+        <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
         .font-display {
@@ -344,38 +345,111 @@ export default function BookingCalendar() {
         }
       `}</style>
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#1F5C73]">
-        <div>
-          <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight dark:text-[#C7CED1]">
-            Tvättstugan
-          </h1>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#1F5C73]">
+          <div>
+            <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight dark:text-[#C7CED1]">
+              Tvättstugan
+            </h1>
 
-          <p className="font-body text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
-            Välj en dag för att se lediga tider
-          </p>
+            <p className="font-body text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
+              Välj en dag för att se lediga tider
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 font-body">
+            <button
+              onClick={() => changeMonth(-1)}
+              aria-label="Föregående månad"
+              className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors "
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            <span className="w-36 sm:w-40 text-center text-sm font-medium text-[#16242C] dark:text-[#C7CED1]">
+              {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
+            </span>
+
+            <button
+              onClick={() => changeMonth(1)}
+              aria-label="Nästa månad"
+              className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-1 font-body">
-          <button
-            onClick={() => changeMonth(-1)}
-            aria-label="Föregående månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors "
-          >
-            <ChevronLeft size={18} />
-          </button>
+        {/* Content */}
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Calendar */}
+          <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-[#1F5C73]">
+            <CalendarGrid
+              days={days}
+              selected={selected}
+              today={today}
+              onSelect={setSelected}
+              isPast={isPast}
+              availabilityForDay={availabilityForDay}
+            />
 
-          <span className="w-36 sm:w-40 text-center text-sm font-medium text-[#16242C] dark:text-[#C7CED1]">
-            {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
-          </span>
+            <BookingLegend />
+            {myBooking && (
+              <div className="mt-6 border border-[#1F5C73] p-4 font-body">
+                <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
+                  Din bokade tvättid
+                </p>
 
-          <button
-            onClick={() => changeMonth(1)}
-            aria-label="Nästa månad"
-            className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
-          >
-            <ChevronRight size={18} />
-          </button>
+                <h2 className="font-display text-lg font-semibold text-[#16242C] dark:text-[#C7CED1]">
+                  {new Date(myBooking.date).toLocaleDateString("sv-SE", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                  })}
+                </h2>
+
+                <p className="text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
+                  {
+                    SLOT_TEMPLATE.find((slot) => slot.id === myBooking.slotId)
+                      ?.label
+                  }
+                </p>
+
+                <button
+                  onClick={() => {
+                    // Ta bort bokningen
+                    setBookings((prev) => {
+                      const updatedDay = { ...(prev[myBooking.date] || {}) };
+
+                      delete updatedDay[myBooking.slotId];
+
+                      return {
+                        ...prev,
+                        [myBooking.date]: updatedDay,
+                      };
+                    });
+
+                    // Ta bort informationen om min bokning
+                    setMyBooking(null);
+                  }}
+                  className="mt-4 border border-red-500 px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                >
+                  Avboka
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Time slots */}
+          <div className="md:w-80">
+            <TimeSlots
+              selected={selected}
+              selectedBookings={selectedBookings}
+              isPast={isPast(selected)}
+              onToggleSlot={toggleSlot}
+              onBook={handleBooking}
+            />
+          </div>
         </div>
       </div>
 
@@ -439,8 +513,6 @@ export default function BookingCalendar() {
                 Avboka
               </button>
             </div>
-          )}
-        </div>
 
         {/* Time slots */}
         <div className="md:w-80">
@@ -453,7 +525,7 @@ export default function BookingCalendar() {
             slots={selectedSlots}
           />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

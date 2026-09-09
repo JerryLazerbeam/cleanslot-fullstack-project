@@ -71,7 +71,7 @@ function PasswordUpdater() {
   return (
     <main>
       <section>
-        <h1 className="mt-8 text-center text-4xl font-bold">Din profil</h1>
+        <h1 className="pt-4 text-center text-4xl font-bold">Din profil</h1>
         <p className="text-center mt-2">Användarnamn: {username}</p>
         <section className="flex flex-col items-center gap-6">
           <div className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 shadow-2xl hover:bg-black/70 transition-colors duration-300 cursor-pointer overflow-hidden mt-10 p-40">
@@ -93,12 +93,12 @@ function PasswordUpdater() {
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            className="hidden"
+            className="hidden text-white"
             onChange={handleImageChange}
           />
         </section>
       </section>
-      <section className="flex flex-col items-center font-semibold text-lg mt-15">
+      <section className="flex flex-col items-center font-semibold text-lg mt-10">
         <h1>Byt lösenord</h1>
 
         <input
@@ -106,11 +106,11 @@ function PasswordUpdater() {
           placeholder="Nytt lösenord"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="border rounded-lg p-2 pl-3 mt-4"
+          className="border  rounded-lg p-2 pl-3 mt-4"
         ></input>
         <button
           onClick={handlePasswordChange}
-          className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7"
+          className="mt-8 text-white text-lg font-semibold hover:bg-gray-700 bg-[#1F5C73] border rounded-lg focus:border-dark p-3 px-7"
         >
           Spara
         </button>

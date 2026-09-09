@@ -20,6 +20,7 @@ export default function TimeSlots({
   onBook,
   slots,
 }: TimeSlotsProps) {
+  const hasSelectedSlot = Object.values(selectedBookings).includes("mig");
   return (
     <div className="p-4 sm:p-8 font-body">
       <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
@@ -52,7 +53,7 @@ export default function TimeSlots({
                     "w-full flex items-center justify-between px-3 py-2.5 border text-sm transition-colors",
 
                     isTaken
-                      ? "border-[#D8DEE2] bg-[#F4F6F7] text-[#B3BCC2] cursor-not-allowed"
+                      ? "line-through border-[#D8DEE2] bg-[#ff000077] text-[#000000] dark:bg-[#ff00007c] dark:border-[#1F5C73] cursor-not-allowed"
                       : isMine
                         ? "border-[#1F5C73] bg-[#1F5C73] text-white"
                         : "border-[#D8DEE2] text-[#16242C] hover:border-[#1F5C73] dark:text-[#C7CED1] dark:border-[#1F5C73] dark:hover:border-[#D8DEE2]",
@@ -70,12 +71,14 @@ export default function TimeSlots({
         </ul>
       )}
 
-      <button
-        onClick={onBook}
-        className="rounded-md bg-[#1F5C73] px-6 py-2 text-white  hover:bg-gray-700 shadow-xl mt-4"
-      >
-        Boka
-      </button>
+      {hasSelectedSlot && (
+        <button
+          onClick={onBook}
+          className="rounded-md bg-[#1F5C73] px-6 py-2 text-white hover:bg-gray-700 shadow-xl mt-4"
+        >
+          Boka
+        </button>
+      )}
     </div>
   );
 }
