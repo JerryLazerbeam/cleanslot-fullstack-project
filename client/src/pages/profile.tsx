@@ -13,7 +13,9 @@ function Profile() {
         <ServiceReportHistory />
       </main>
 
-      <Footer />
+      <footer className="lg:ml-64">
+        <Footer />
+      </footer>
     </div>
   );
 }

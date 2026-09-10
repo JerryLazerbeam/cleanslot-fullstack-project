@@ -259,6 +259,12 @@ export default function BookingCalendar() {
   }
 
   function toggleSlot(slotId: number) {
+    // Har användaren redan en bokad tvättid?
+    // Då får ingen annan tid väljas.
+    if (myBooking) {
+      return;
+    }
+
     if (isPast(selected)) return;
 
     const slotKey = `s${slotId}`;
@@ -270,11 +276,12 @@ export default function BookingCalendar() {
 
       const current = dayBookings[slotKey];
 
-      // Om man klickar på sin redan valda tid -> avmarkera den
+      // Klickar man på sin valda tid innan bokningen är bekräftad
+      // så avmarkeras den.
       if (current === "mig") {
         delete dayBookings[slotKey];
       } else if (!current) {
-        // Ta bort eventuell tidigare vald tid
+        // Ta bort eventuell tidigare vald tid samma dag
         Object.keys(dayBookings).forEach((id) => {
           if (dayBookings[id] === "mig") {
             delete dayBookings[id];
@@ -284,7 +291,7 @@ export default function BookingCalendar() {
         // Markera den nya tiden
         dayBookings[slotKey] = "mig";
       } else {
-        // Tiden är redan bokad av någon annan
+        // Tiden är bokad av någon annan
         return prev;
       }
 
@@ -295,6 +302,11 @@ export default function BookingCalendar() {
     });
   }
   async function handleBooking() {
+    if (myBooking) {
+      alert("Du har redan en bokad tvättid. Avboka den innan du bokar en ny.");
+      return;
+    }
+
     const dayBookings = bookings[selectedKey] || {};
 
     const mySlot = Object.keys(dayBookings).find(
@@ -313,6 +325,7 @@ export default function BookingCalendar() {
         date: selectedKey,
         slotId: mySlot,
       });
+
       const updatedBookings = await getBookings();
       setBackendBookings(updatedBookings);
 
