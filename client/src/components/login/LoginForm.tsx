@@ -24,7 +24,7 @@ function LoginForm() {
     });
 
     if (response.ok) {
-      navigate("/rules");
+      navigate("/booking");
     } else {
       console.log("Inloggningen misslyckades");
     }

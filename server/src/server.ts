@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.routes";
 import { requireLogin } from "./middleware/auth.middleware";
 import userRoutes from "./routes/user.routes";
 import bookingRoutes from "./routes/booking.routes";
+import equipmentRoutes from "./routes/equipment.routes";
 
 const app = express();
 const PORT = 3000;
@@ -28,6 +29,7 @@ app.use(
 app.use("/api", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/equipment", equipmentRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });
