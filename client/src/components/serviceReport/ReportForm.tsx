@@ -1,32 +1,73 @@
-import type { CreateServiceReport } from "./serviceReportTypes";
-import { useState } from "react";
+import type { CreateServiceReport, Equipment } from "./reportTypes";
+import { useEffect, useState } from "react";
+import { createReport } from "../../services/reportService";
 
-function ServiceReportPage() {
+function ReportForm() {
   const [formData, setFormData] = useState<CreateServiceReport>({
     phone: "",
     email: "",
-    machines: [],
+    equipment: [],
     description: "",
   });
 
-  function handleMachineChange(machine: string) {
-    if (formData.machines.includes(machine)) {
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/equipment", {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Kunde inte hämta utrustning");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setEquipment(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  console.log(equipment);
+
+  function handleEquipmentChange(equipment: number) {
+    if (formData.equipment.includes(equipment)) {
       setFormData({
         ...formData,
-        machines: formData.machines.filter((item) => item !== machine),
+        equipment: formData.equipment.filter((item) => item !== equipment),
       });
     } else {
       setFormData({
         ...formData,
-        machines: [...formData.machines, machine],
+        equipment: [...formData.equipment, equipment],
       });
     }
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log(formData);
+    try {
+      const result = await createReport(formData);
+
+      console.log(result);
+
+      alert("Felanmälan skickad!");
+
+      setFormData({
+        phone: "",
+        email: "",
+        equipment: [],
+        description: "",
+      });
+    } catch (error) {
+      console.error(error);
+
+      alert("Kunde inte skicka felanmälan");
+    }
   }
 
   return (
@@ -82,24 +123,19 @@ function ServiceReportPage() {
             </h2>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                ["washer-1", "Tvättmaskin 1"],
-                ["washer-2", "Tvättmaskin 2"],
-                ["washer-3", "Tvättmaskin 3"],
-                ["washer-4", "Tvättmaskin 4"],
-              ].map(([value, label]) => (
+              {equipment.map((item) => (
                 <label
-                  key={value}
+                  key={item.equipment_id}
                   className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-4 transition hover:border-[#1F5C73] dark:border-gray-700"
                 >
                   <input
                     type="checkbox"
-                    checked={formData.machines.includes(value)}
-                    onChange={() => handleMachineChange(value)}
+                    checked={formData.equipment.includes(item.equipment_id)}
+                    onChange={() => handleEquipmentChange(item.equipment_id)}
                     className="h-4 w-4 accent-[#1F5C73]"
                   />
 
-                  <span>{label}</span>
+                  <span>{item.name}</span>
                 </label>
               ))}
             </div>
@@ -141,4 +177,4 @@ function ServiceReportPage() {
   );
 }
 
-export default ServiceReportPage;
+export default ReportForm;

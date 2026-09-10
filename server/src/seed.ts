@@ -10,12 +10,13 @@ const organizationInfo = insertOrganization.run("Test Organization");
 const organizationId = Number(organizationInfo.lastInsertRowid);
 
 const insertUser = db.prepare(`
-    INSERT INTO users (username, password, organization_id)
-    VALUES (?, ?, ?)
+    INSERT INTO users (username, password, organization_id, role)
+    VALUES (?, ?, ?, ?)
 `);
 
-insertUser.run("1", "1", organizationId);
-insertUser.run("2", "2", organizationId);
+insertUser.run("1", "1", organizationId, "user");
+insertUser.run("2", "2", organizationId, "user");
+insertUser.run("a", "a", organizationId, "admin");
 
 const insertSlot = db.prepare(`
     INSERT INTO washing_slots (organization_id, date, start_time, end_time)

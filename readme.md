@@ -64,3 +64,8 @@ git checkout develop
 git pull origin develop
 git merge your branch
 git push origin develop
+
+Miscellaneous
+git pull origin develop
+git switch -c feature/namnet-på-din-feature
+npx tsx src/seed.ts

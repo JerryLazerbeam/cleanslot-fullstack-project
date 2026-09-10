@@ -176,7 +176,7 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           </NavLink>
 
           <NavLink
-            to="/serviceReport"
+            to="/ServiceReport"
             onClick={() => setMenuOpen(false)}
             className={navLinkClass}
           >

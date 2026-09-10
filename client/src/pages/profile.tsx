@@ -1,7 +1,7 @@
 import PasswordUpdater from "../components/Profile/passwordUppdater";
 import Navbar from "../components/navbar/navbar";
 import Footer from "../components/footer/footer";
-import ServiceReportHistory from "../components/servicecomponents/serviceReportHistory";
+import ServiceReportHistory from "../components/serviceReport/ReportHistory";
 
 function Profile() {
   return (
