@@ -1,0 +1,191 @@
+import { useNavigate, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Menu, X, UserShield , CalendarDays, LogOut, Moon, Sun } from "lucide-react";
+
+export default function NavbarAdmin() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  function toggleDarkMode() {
+    setDarkMode((prev) => !prev);
+  }
+
+  async function handleLogout() {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    setMenuOpen(false);
+    navigate("/");
+  }
+
+  const navLinkClass = () =>
+    `
+      flex items-center gap-3
+      px-4 py-3
+      rounded-md
+      text-gray-700 dark:text-gray-200
+      hover:bg-gray-100 dark:hover:bg-gray-800
+      hover:text-[#1F5C73]
+      transition-colors
+      
+    `;
+
+  const logoutButtonClass = `
+    w-full
+    flex items-center gap-3
+    px-4 py-3
+    rounded-md
+    text-gray-700 dark:text-gray-200
+    hover:bg-gray-100 dark:hover:bg-gray-800
+    hover:text-[#1F5C73]
+    transition-all duration-200
+  `;
+
+  return (
+    <nav
+      className={`
+        bg-white dark:bg-[#111C22]
+        border-b border-gray-200 dark:border-gray-700
+        transition-colors duration-300
+
+       
+      `}
+    >
+      {/* Header */}
+      <div
+        className="
+          max-w-6xl
+          mx-auto
+          px-4 py-4
+          flex items-center justify-between
+          lg:px-6 lg:py-6
+        "
+      >
+        <NavLink to="/booking">
+          <img
+            src="../images/logoclean.png"
+            alt="CleanSlot Logo"
+            className="h-10 w-auto block dark:hidden"
+          />
+
+          <img
+            src="../images/CleanSlot-Logo-Darkmode.png"
+            alt="CleanSlot Logo"
+            className="h-10 w-auto hidden dark:block"
+          />
+        </NavLink>
+
+        {/* Hamburger - mobil */}
+        <button
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="
+            p-2
+            rounded-md
+            text-gray-700 dark:text-gray-200
+            hover:bg-gray-100 dark:hover:bg-gray-800
+            transition-colors
+            lg:hidden
+          "
+          aria-label="Öppna meny"
+        >
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobil meny */}
+      <div
+        className={`
+          overflow-hidden
+          border-t border-gray-200 dark:border-gray-700
+          bg-white dark:bg-[#111C22]
+          lg:hidden
+          transition-all duration-300 ease-in-out
+
+          ${
+            menuOpen
+              ? "max-h-150 opacity-100 translate-y-0"
+              : "max-h-0 opacity-0 -translate-y-2"
+          }
+        `}
+      >
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-2">
+          <NavLink to="" className={navLinkClass}>
+            <UserShield size={20} />
+            <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="" className={navLinkClass}>
+            <CalendarDays size={20} />
+            <span>Bokningar</span>
+          </NavLink>
+
+          {/* Dark mode */}
+          <button
+            onClick={toggleDarkMode}
+            className="
+              flex items-center justify-between
+              px-4 py-3
+              rounded-md
+              text-gray-700
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              hover:text-[#1F5C73]
+              transition-colors
+            "
+          >
+            <div className="flex items-center gap-3">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+            </div>
+
+            <div
+              className={`
+                relative
+                w-11 h-6
+                rounded-full
+                transition-colors duration-300
+                ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+              `}
+            >
+              <div
+                className={`
+                  absolute
+                  top-1
+                  w-4 h-4
+                  rounded-full
+                  bg-white
+                  shadow-sm
+                  transition-transform duration-300
+                  ${darkMode ? "translate-x-6" : "translate-x-1"}
+                `}
+              />
+            </div>
+          </button>
+
+          {/* Logout */}
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+            <button onClick={handleLogout} className={logoutButtonClass}>
+              <LogOut size={20} />
+              <span>Logga ut</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
