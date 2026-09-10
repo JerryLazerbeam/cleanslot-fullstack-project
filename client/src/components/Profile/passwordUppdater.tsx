@@ -127,7 +127,7 @@ function PasswordUpdater() {
 
               <button
                 onClick={handlePasswordChange}
-                className="w-full rounded-lg bg-[#1F5C73] px-8 py-3 text-white transition-colors hover:bg-[#17485A] sm:w-auto"
+                className="w-full rounded-sm bg-[#1F5C73] px-8 py-3 text-white transition-colors hover:bg-[#17485A] sm:w-auto"
               >
                 Spara
               </button>
