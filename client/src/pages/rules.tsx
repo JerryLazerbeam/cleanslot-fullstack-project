@@ -4,14 +4,16 @@ import Footer from "../components/footer/footer";
 
 function RulesPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]" >
+    <div className="min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
       <Navbar />
 
       <main className="flex-1 lg:ml-64">
         <Rules />
       </main>
 
-      <Footer />
+      <footer className="lg:ml-64">
+        <Footer />
+      </footer>
     </div>
   );
 }

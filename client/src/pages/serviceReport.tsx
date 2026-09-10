@@ -144,7 +144,9 @@ function ServiceReport() {
         </section>
       </form>
 
-      <Footer />
+      <footer className="lg:ml-64">
+        <Footer />
+      </footer>
     </main>
   );
 }
