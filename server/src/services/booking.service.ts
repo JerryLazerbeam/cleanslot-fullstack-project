@@ -2,12 +2,14 @@ import db from "../database";
 
 export function getAvailableSlots(organizationId: number) {
   const slots = db
-    .prepare(`
+    .prepare(
+      `
       SELECT slot_id, date, start_time, end_time
       FROM washing_slots
       WHERE organization_id = ?
       ORDER BY date, start_time
-    `)
+    `,
+    )
     .all(organizationId);
 
   console.log("Organization ID:", organizationId);
@@ -44,4 +46,12 @@ export function getBookings(organizationId: number) {
     .all(organizationId);
 
   return bookings;
+}
+export function deleteBooking(bookingId: number) {
+  const statement = db.prepare(`
+    DELETE FROM bookings
+    WHERE booking_id = ?
+  `);
+
+  return statement.run(bookingId);
 }

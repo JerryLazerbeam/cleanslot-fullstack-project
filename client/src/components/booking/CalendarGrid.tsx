@@ -59,7 +59,7 @@ export default function CalendarGrid({
                 "aspect-square relative flex flex-col items-center justify-center font-body text-sm transition-colors",
                 past
                   ? "text-[#C7CED1] cursor-not-allowed"
-                  : "text-[#16242C] hover:bg-[#EEF3F6] cursor-pointer dark:text-[#C7CED1] dark:hover:bg-[#1F5C73]",
+                  : "text-[#16242C] hover:bg-[#1F5C73] hover:text-white cursor-pointer dark:text-[#C7CED1] dark:hover:bg-[#1F5C73]",
 
                 isSelected ? "bg-[#1F5C73] text-white hover:bg-[#1F5C73]" : "",
 

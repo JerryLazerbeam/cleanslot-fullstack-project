@@ -5,7 +5,7 @@ import ServiceReportHistory from "../components/servicecomponents/serviceReportH
 
 function Profile() {
   return (
-    <div className=" min-h-screen bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] ">
+    <div className=" min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] ">
       <Navbar />
 
       <main className="flex-1 lg:ml-64">
@@ -13,7 +13,9 @@ function Profile() {
         <ServiceReportHistory />
       </main>
 
-      <Footer />
+      <footer className="lg:ml-64">
+        <Footer />
+      </footer>
     </div>
   );
 }

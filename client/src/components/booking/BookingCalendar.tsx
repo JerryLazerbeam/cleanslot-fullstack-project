@@ -3,7 +3,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarGrid from "./CalendarGrid";
 import TimeSlots from "./TimeSlots";
 import BookingLegend from "./BookingLegend";
-import { getSlots, bookSlot, getBookings } from "../../services/bookingService";
+import {
+  getSlots,
+  bookSlot,
+  getBookings,
+  deleteBooking,
+} from "../../services/bookingService";
 import { getProfile } from "../../services/userService";
 
 export const MONTH_NAMES = [
@@ -116,7 +121,11 @@ export default function BookingCalendar() {
 
     getBookings()
       .then((data) => {
-        const backendBookings: BookingsByDate = {};
+        console.log("Bokningar från backend:", data);
+
+        setBackendBookings(data);
+
+        const convertedBookings: BookingsByDate = {};
 
         data.forEach(
           (booking: {
@@ -127,50 +136,30 @@ export default function BookingCalendar() {
             start_time: string;
             end_time: string;
           }) => {
-            if (!backendBookings[booking.date]) {
-              backendBookings[booking.date] = {};
+            if (!convertedBookings[booking.date]) {
+              convertedBookings[booking.date] = {};
             }
 
             const slotId = `s${booking.slot_id}`;
 
-            backendBookings[booking.date][slotId] =
+            convertedBookings[booking.date][slotId] =
               booking.user_id === currentUserId ? "mig" : "annan";
+
+            if (booking.user_id === currentUserId) {
+              setMyBooking({
+                date: booking.date,
+                slotId: slotId,
+              });
+            }
           },
         );
 
-        console.log("Omvandlade bokningar:", backendBookings);
-
-        setBookings(backendBookings);
+        setBookings(convertedBookings);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [currentUserId]);
-
-  useEffect(() => {
-    getBookings()
-      .then((data) => {
-        console.log("Bokningar från backend:", data);
-        setBackendBookings(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    const convertedBookings: BookingsByDate = {};
-
-    backendBookings.forEach((booking) => {
-      if (!convertedBookings[booking.date]) {
-        convertedBookings[booking.date] = {};
-      }
-
-      convertedBookings[booking.date][`s${booking.slot_id}`] = "annan";
-    });
-
-    setBookings(convertedBookings);
-  }, [backendBookings]);
 
   const [myBooking, setMyBooking] = useState<{
     date: string;
@@ -270,20 +259,29 @@ export default function BookingCalendar() {
   }
 
   function toggleSlot(slotId: number) {
+    // Har användaren redan en bokad tvättid?
+    // Då får ingen annan tid väljas.
+    if (myBooking) {
+      return;
+    }
+
     if (isPast(selected)) return;
+
+    const slotKey = `s${slotId}`;
 
     setBookings((prev) => {
       const dayBookings: DayBookings = {
         ...(prev[selectedKey] || {}),
       };
 
-      const current = dayBookings[slotId];
+      const current = dayBookings[slotKey];
 
-      // Om man klickar på sin redan valda tid → avmarkera den
+      // Klickar man på sin valda tid innan bokningen är bekräftad
+      // så avmarkeras den.
       if (current === "mig") {
-        delete dayBookings[slotId];
+        delete dayBookings[slotKey];
       } else if (!current) {
-        // Ta bort eventuell tidigare vald tid
+        // Ta bort eventuell tidigare vald tid samma dag
         Object.keys(dayBookings).forEach((id) => {
           if (dayBookings[id] === "mig") {
             delete dayBookings[id];
@@ -291,9 +289,9 @@ export default function BookingCalendar() {
         });
 
         // Markera den nya tiden
-        dayBookings[slotId] = "mig";
+        dayBookings[slotKey] = "mig";
       } else {
-        // Tiden är redan bokad av någon annan
+        // Tiden är bokad av någon annan
         return prev;
       }
 
@@ -304,6 +302,11 @@ export default function BookingCalendar() {
     });
   }
   async function handleBooking() {
+    if (myBooking) {
+      alert("Du har redan en bokad tvättid. Avboka den innan du bokar en ny.");
+      return;
+    }
+
     const dayBookings = bookings[selectedKey] || {};
 
     const mySlot = Object.keys(dayBookings).find(
@@ -322,6 +325,7 @@ export default function BookingCalendar() {
         date: selectedKey,
         slotId: mySlot,
       });
+
       const updatedBookings = await getBookings();
       setBackendBookings(updatedBookings);
 
@@ -350,27 +354,15 @@ export default function BookingCalendar() {
   }
   return (
     <>
-      <div className="w-full max-w-4xl bg-white-100 border border-[#1F5C73]">
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
-
-          .font-display {
-            font-family: 'Space Grotesk', sans-serif;
-          }
-
-          .font-body {
-            font-family: 'Inter', sans-serif;
-          }
-        `}</style>
-
+      <div className="w-full max-w-4xl rounded-xl border border-gray-200 bg-white text-[#16242C] shadow-lg dark:border-none dark:bg-[#16242C] dark:text-[#C7CED1] dark:shadow-none">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-[#1F5C73]">
+        <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-gray-200 dark:border-[#1F5C73]">
           <div>
-            <h1 className="font-display text-2xl sm:text-3xl text-[#16242C] font-semibold tracking-tight dark:text-[#C7CED1]">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">
               Tvättstugan
             </h1>
 
-            <p className="font-body text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
+            <p className="font-body text-sm text-gray-500 mt-1 dark:text-gray-400">
               Välj en dag för att se lediga tider
             </p>
           </div>
@@ -379,19 +371,19 @@ export default function BookingCalendar() {
             <button
               onClick={() => changeMonth(-1)}
               aria-label="Föregående månad"
-              className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-gray-600 dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
 
-            <span className="w-36 sm:w-40 text-center text-sm font-medium text-[#16242C] dark:text-[#C7CED1]">
+            <span className="w-36 sm:w-40 text-center text-sm font-medium">
               {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
             </span>
 
             <button
               onClick={() => changeMonth(1)}
               aria-label="Nästa månad"
-              className="w-9 h-9 flex items-center justify-center border border-[#D8DEE2] text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-[#5A6B73] dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 text-[#16242C] hover:text-white hover:bg-[#1F5C73] dark:border-gray-600 dark:text-[#C7CED1] dark:hover:bg-[#1F5C73] transition-colors"
             >
               <ChevronRight size={18} />
             </button>
@@ -401,7 +393,7 @@ export default function BookingCalendar() {
         {/* Content */}
         <div className="flex flex-col md:flex-row gap-4">
           {/* Calendar */}
-          <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-[#1F5C73]">
+          <div className="p-4 sm:p-8 md:flex-1 border-b md:border-b-0 md:border-r border-gray-200 dark:border-[#1F5C73]">
             <CalendarGrid
               days={days}
               selected={selected}
@@ -414,12 +406,12 @@ export default function BookingCalendar() {
             <BookingLegend />
 
             {myBooking && (
-              <div className="mt-6 border border-[#1F5C73] p-4 font-body">
-                <p className="text-xs text-[#5A6B73] mb-1 dark:text-[#C7CED1]">
+              <div className="mt-6 rounded-lg border border-gray-200 bg-[#f8f9fb] p-4 font-body dark:border-gray-700 dark:bg-[#111C22]">
+                <p className="text-xs text-gray-500 mb-1 dark:text-gray-400">
                   Din bokade tvättid
                 </p>
 
-                <h2 className="font-display text-lg font-semibold text-[#16242C] dark:text-[#C7CED1]">
+                <h2 className="font-display text-lg font-semibold">
                   {new Date(myBooking.date).toLocaleDateString("sv-SE", {
                     weekday: "long",
                     day: "numeric",
@@ -427,10 +419,11 @@ export default function BookingCalendar() {
                   })}
                 </h2>
 
-                <p className="text-sm text-[#5A6B73] mt-1 dark:text-[#C7CED1]">
+                <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
                   {(() => {
                     const slot = backendSlots.find(
-                      (slot) => String(slot.id) === myBooking.slotId,
+                      (slot) =>
+                        String(slot.id) === myBooking.slotId.replace("s", ""),
                     );
 
                     return slot ? `${slot.startTime}–${slot.endTime}` : "";
@@ -438,7 +431,27 @@ export default function BookingCalendar() {
                 </p>
 
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    console.log("AVBOKA KLICKAD");
+                    const booking = backendBookings.find(
+                      (booking) =>
+                        booking.slot_id ===
+                          Number(myBooking.slotId.replace("s", "")) &&
+                        booking.user_id === currentUserId,
+                    );
+                    if (!booking) {
+                      alert("Kunde inte hitta bokningen");
+                      return;
+                    }
+
+                    await deleteBooking(booking.booking_id);
+
+                    setBackendBookings((prev) =>
+                      prev.filter(
+                        (item) => item.booking_id !== booking.booking_id,
+                      ),
+                    );
+
                     setBookings((prev) => {
                       const updatedDay = {
                         ...(prev[myBooking.date] || {}),
@@ -454,7 +467,7 @@ export default function BookingCalendar() {
 
                     setMyBooking(null);
                   }}
-                  className="mt-4 border border-red-500 px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                  className="mt-4 rounded-md border border-red-500 px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors"
                 >
                   Avboka
                 </button>
@@ -475,14 +488,15 @@ export default function BookingCalendar() {
           </div>
         </div>
       </div>
+
       {showRulesModal && (
         <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 px-4">
-          <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-2xl dark:bg-[#111C22]">
-            <h2 className="font-display text-2xl font-semibold text-[#16242C] dark:text-[#C7CED1]">
+          <div className="w-full max-w-lg rounded-lg bg-white p-6 text-[#16242C] shadow-2xl dark:bg-[#16242C] dark:text-[#C7CED1]">
+            <h2 className="font-display text-2xl font-semibold">
               Förhållningsregler
             </h2>
 
-            <p className="mt-2 text-sm text-[#5A6B73] dark:text-[#C7CED1]">
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Läs igenom reglerna innan du bokar tvättstugan.
             </p>
 

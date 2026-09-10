@@ -15,6 +15,7 @@ const insertUser = db.prepare(`
 `);
 
 insertUser.run("1", "1", organizationId);
+insertUser.run("2", "2", organizationId);
 
 const insertSlot = db.prepare(`
     INSERT INTO washing_slots (organization_id, date, start_time, end_time)
@@ -27,5 +28,17 @@ insertSlot.run(organizationId, "2026-09-10", "14:00", "16:00");
 
 insertSlot.run(organizationId, "2026-09-11", "10:00", "11:00");
 insertSlot.run(organizationId, "2026-09-11", "11:00", "12:00");
+
+const insertEquipment = db.prepare(`
+  INSERT INTO equipment (organization_id, name)
+  VALUES (?, ?)
+`);
+
+insertEquipment.run(organizationId, "Tvättmaskin 1");
+insertEquipment.run(organizationId, "Tvättmaskin 2");
+insertEquipment.run(organizationId, "Tvättmaskin 3");
+insertEquipment.run(organizationId, "Tvättmaskin 4");
+insertEquipment.run(organizationId, "Torktumlare 1");
+insertEquipment.run(organizationId, "Torkrum");
 
 console.log("Organization, user and slots created");
