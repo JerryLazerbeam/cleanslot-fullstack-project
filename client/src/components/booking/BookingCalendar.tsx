@@ -484,6 +484,7 @@ export default function BookingCalendar() {
               onToggleSlot={toggleSlot}
               onBook={handleBooking}
               slots={selectedSlots}
+              hasExistingBooking={myBooking !== null}
             />
           </div>
         </div>
