@@ -130,7 +130,7 @@ function ServiceReportPage() {
           <div className="mt-8 flex justify-center sm:justify-end">
             <button
               type="submit"
-              className="w-full rounded-lg bg-[#1F5C73] px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-[#17485A] sm:w-auto"
+              className="w-full rounded-sm bg-[#1F5C73] px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-[#17485A] sm:w-auto"
             >
               Skicka felanmälan
             </button>
