@@ -1,8 +1,10 @@
 import { useMemo, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Bell } from "lucide-react";
 import CalendarGrid from "./CalendarGrid";
 import TimeSlots from "./TimeSlots";
 import BookingLegend from "./BookingLegend";
+import ReminderModal from "./modals/ReminderModal";
+import BookingConfirmModal from "./modals/BookingConfirmModal";
 import {
   getSlots,
   bookSlot,
@@ -88,6 +90,12 @@ export default function BookingCalendar() {
 
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  const [showBookingConfirm, setShowBookingConfirm] = useState(false);
+
+  const [showReminderModal, setShowReminderModal] = useState(false);
+
+  const [reminders, setReminders] = useState<number[]>([]);
 
   const [selected, setSelected] = useState<Date>(() => new Date());
 
@@ -352,6 +360,24 @@ export default function BookingCalendar() {
 
     return "partial";
   }
+  function toggleReminder(minutes: number) {
+    setReminders((prev) =>
+      prev.includes(minutes)
+        ? prev.filter((item) => item !== minutes)
+        : [...prev, minutes],
+    );
+  }
+  const selectedSlotId = Object.keys(selectedBookings).find(
+    (slotId) => selectedBookings[slotId] === "mig",
+  );
+
+  const selectedSlot = selectedSlots.find(
+    (slot) => `s${slot.id}` === selectedSlotId,
+  );
+
+  const selectedTime = selectedSlot
+    ? `${selectedSlot.startTime}–${selectedSlot.endTime}`
+    : "";
   return (
     <>
       <div className="w-full max-w-4xl rounded-xl border border-gray-200 bg-white text-[#16242C] shadow-lg dark:border-none dark:bg-[#16242C] dark:text-[#C7CED1] dark:shadow-none">
@@ -407,17 +433,31 @@ export default function BookingCalendar() {
 
             {myBooking && (
               <div className="mt-6 rounded-lg border border-gray-200 bg-[#f8f9fb] p-4 font-body dark:border-gray-700 dark:bg-[#111C22]">
-                <p className="text-xs text-gray-500 mb-1 dark:text-gray-400">
-                  Din bokade tvättid
-                </p>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">
+                      Din bokade tvättid
+                    </p>
 
-                <h2 className="font-display text-lg font-semibold">
-                  {new Date(myBooking.date).toLocaleDateString("sv-SE", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                  })}
-                </h2>
+                    <h2 className="font-display text-lg font-semibold">
+                      {new Date(myBooking.date).toLocaleDateString("sv-SE", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                      })}
+                    </h2>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowReminderModal(true)}
+                    aria-label="Ställ in påminnelse"
+                    title="Ställ in påminnelse"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 text-[#1F5C73] transition-colors hover:border-[#1F5C73] hover:bg-[#1F5C73] hover:text-white dark:border-[#1F5C73]"
+                  >
+                    <Bell size={19} />
+                  </button>
+                </div>
 
                 <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
                   {(() => {
@@ -482,7 +522,9 @@ export default function BookingCalendar() {
               selectedBookings={selectedBookings}
               isPast={isPast(selected)}
               onToggleSlot={toggleSlot}
-              onBook={handleBooking}
+              onBook={() => {
+                setShowBookingConfirm(true);
+              }}
               slots={selectedSlots}
               hasExistingBooking={myBooking !== null}
             />
@@ -505,6 +547,10 @@ export default function BookingCalendar() {
               <p>• Respektera din bokade tvättid.</p>
               <p>• Lämna tvättstugan ren och städad.</p>
               <p>• Ta bort tvätt och tillhörigheter när din tid är slut.</p>
+              <p>
+                • Om du inte längre kan nyttja din bokade tid, vänligen avboka
+                den i god tid så att andra kan använda den.
+              </p>
               <p>• Felanmäl maskiner som inte fungerar.</p>
             </div>
 
@@ -529,6 +575,25 @@ export default function BookingCalendar() {
             </button>
           </div>
         </div>
+      )}
+      {showBookingConfirm && (
+        <BookingConfirmModal
+          selected={selected}
+          selectedTime={selectedTime}
+          onClose={() => setShowBookingConfirm(false)}
+          onOpenReminder={() => setShowReminderModal(true)}
+          onConfirm={async () => {
+            await handleBooking();
+            setShowBookingConfirm(false);
+          }}
+        />
+      )}
+      {showReminderModal && (
+        <ReminderModal
+          reminders={reminders}
+          onToggleReminder={toggleReminder}
+          onClose={() => setShowReminderModal(false)}
+        />
       )}
     </>
   );

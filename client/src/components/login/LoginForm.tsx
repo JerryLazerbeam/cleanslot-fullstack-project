@@ -36,8 +36,8 @@ function LoginForm() {
         className="flex items-center justify-center flex-col gap-4 "
         onSubmit={handleSubmit}
       >
-        <div className="items-center justify-center flex-col">
-          <label className="block" htmlFor="username">
+        <div className="items-center justify-center flex-col mb-3">
+          <label className="block " htmlFor="username">
             Användarnamn
           </label>
           <input
@@ -49,11 +49,11 @@ function LoginForm() {
             autoComplete="username"
             required
             onChange={(e) => setUsername(e.target.value)}
-            className=" text-center border border-gray-300 rounded-md p-2 px-10  focus:placeholder-transparent"
+            className=" text-center rounded-sm border border-gray-300 bg-white outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22] p-3 px-10  focus:placeholder-transparent"
           />
         </div>
 
-        <div>
+        <div className="mb-3">
           <label className="block" htmlFor="password">
             Lösenord
           </label>
@@ -66,13 +66,13 @@ function LoginForm() {
             autoComplete="current-password"
             required
             onChange={(e) => setPassword(e.target.value)}
-            className=" text-center border border-gray-300 rounded-md p-2 px-10  focus:placeholder-transparent"
+            className="text-center rounded-sm border border-gray-300 bg-white outline-none focus:border-[#1F5C73] dark:border-[#1F5C73] dark:bg-[#111C22] p-3 px-10  focus:placeholder-transparent"
           />
         </div>
 
         <button
           type="submit"
-          className=" text-white text-lg font-semibold border px-5 py-1 bg-[#1F5C73] hover:bg-gray-700 rounded-md shadow-xl "
+          className=" rounded-sm bg-[#1F5C73] px-8 py-3 text-white transition-colors hover:bg-[#17485A] "
         >
           Logga in
         </button>

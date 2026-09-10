@@ -2,7 +2,7 @@ function Rules() {
   return (
     <div className="px-4">
       <div className="mx-auto mt-10 w-full max-w-2xl rounded-xl border border-gray-200 bg-white p-6 text-[#16242C] shadow-lg dark:border-none dark:bg-[#16242C] dark:text-[#C7CED1] dark:shadow-none sm:p-8">
-        <h1 className="text-center text-3xl font-bold">Tvättstugans regler</h1>
+        <h1 className="text-center text-3xl font-bold">Förhållningsregler</h1>
 
         <div className="mt-8 space-y-4 text-left">
           <p>• Respektera din bokade tvättid.</p>
