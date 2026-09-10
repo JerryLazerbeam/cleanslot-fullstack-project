@@ -63,6 +63,15 @@ CREATE TABLE IF NOT EXISTS report_equipment (
     FOREIGN KEY (equipment_id)
         REFERENCES equipment(equipment_id)
 );
+CREATE TABLE IF NOT EXISTS messages (
+    message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_read INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+);
 `);
 
 export default db;
