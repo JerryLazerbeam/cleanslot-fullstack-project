@@ -72,6 +72,14 @@ CREATE TABLE IF NOT EXISTS messages (
     FOREIGN KEY (user_id)
         REFERENCES users(user_id)
 );
+CREATE TABLE IF NOT EXISTS organization_messages (
+    organization_message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    organization_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (organization_id)
+        REFERENCES organizations(organization_id)
+);
 `);
 
 export default db;
