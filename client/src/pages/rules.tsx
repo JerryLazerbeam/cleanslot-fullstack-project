@@ -1,6 +1,5 @@
 import Rules from "../components/rules/rulesComponent";
 import Navbar from "../components/navbar/navbar";
-import Footer from "../components/footer/footer";
 
 function RulesPage() {
   return (
@@ -11,9 +10,7 @@ function RulesPage() {
         <Rules />
       </main>
 
-      <footer className="lg:ml-64">
-        <Footer />
-      </footer>
+     
     </div>
   );
 }

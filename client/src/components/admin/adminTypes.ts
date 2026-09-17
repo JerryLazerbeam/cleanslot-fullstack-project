@@ -1,6 +1,7 @@
 export type AdminStat = {
   label: string;
   value: number;
+  route: string;
 };
 export type UpcomingBooking = {
   id: number;
@@ -15,7 +16,10 @@ export type ReportSummaryItem = {
   machine: string;
   status: ReportStatus;
 };
-export type QuickAction = {
-  label: string;
-  onClick: () => void;
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
 };

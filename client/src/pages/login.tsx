@@ -1,6 +1,5 @@
 import LoginForm from "../components/login/LoginForm";
 import Logo from "../components/login/logo";
-import Footer from "../components/footer/footer";
 
 function Login() {
   return (
@@ -10,7 +9,7 @@ function Login() {
         <LoginForm />
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

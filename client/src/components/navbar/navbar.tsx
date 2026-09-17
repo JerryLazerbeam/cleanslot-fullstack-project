@@ -320,8 +320,19 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
               </div>
             </button>
 
+            {/* Admin */}
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+              <button
+                onClick={() => navigate("/admin")}
+                className={adminButtonClass}
+              >
+                <UserShield />
+                <span>Admin</span>
+              </button>
+            </div>
+
             {/* Logout */}
-            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-4">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
               <button onClick={handleLogout} className={logoutButtonClass}>
                 <LogOut size={20} />
                 <span>Logga ut</span>

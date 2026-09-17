@@ -1,6 +1,5 @@
 import PasswordUpdater from "../components/Profile/passwordUppdater";
 import Navbar from "../components/navbar/navbar";
-import Footer from "../components/footer/footer";
 import ServiceReportHistory from "../components/serviceReport/ReportHistory";
 
 function Profile() {
@@ -13,9 +12,7 @@ function Profile() {
         <ServiceReportHistory />
       </main>
 
-      <footer className="lg:ml-64">
-        <Footer />
-      </footer>
+      
     </div>
   );
 }

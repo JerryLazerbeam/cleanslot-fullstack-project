@@ -1,21 +1,36 @@
+import { useNavigate } from "react-router-dom";
 import StatsCards from "./StatsCards";
 import UpcomingBookings from "./UpcomingBookings";
 import ReportsSummary from "./ReportsSummary";
-import QuickActions from "./QuickActions";
 import type {
   AdminStat,
   UpcomingBooking,
   ReportSummaryItem,
-  QuickAction,
 } from "./adminTypes";
 
+
 function DashboardContent() {
-  // Mockdata – ersätts senare med useState + anrop till adminService
+  const navigate = useNavigate();
+
   const stats: AdminStat[] = [
-    { label: "Bokningar", value: 12 },
-    { label: "Ledigt", value: 8 },
-    { label: "Användare", value: 2 },
+    { label: "Bokningar", value: 12, route: "/admin/bookings" },
+    { label: "Ledigt", value: 8, route: "/admin/bookings?view=ledigt" },
+    { label: "Användare", value: 2, route: "/admin/users" },
   ];
+
+  
+  // Till back end 
+  // const [stats, setStats] = useState<AdminStat[]>([
+  //   { label: "Bokningar", value: 0, route: "/admin/bookings" },
+  //   { label: "Ledigt", value: 0, route: "/admin/bookings?view=ledigt" },
+  //   { label: "Användare", value: 0, route: "/admin/users" },
+  // ]);
+
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/api/admin/stats")
+  //     .then((res) => res.json())
+  //     .then((data) => setStats(data));
+  // }, []);
 
   const upcomingBookings: UpcomingBooking[] = [
     { id: 1, date: "10/09", time: "10:00–13:00", user: "Anna" },
@@ -27,18 +42,12 @@ function DashboardContent() {
     { id: 2, machine: "Tvättmaskin 4", status: "Pågående" },
   ];
 
-  const quickActions: QuickAction[] = [
-    { label: "Bokningar", onClick: () => console.log("Bokningar") },
-    { label: "Användare", onClick: () => console.log("Användare") },
-    { label: "Blockera", onClick: () => console.log("Blockera") },
-    { label: "Maskiner", onClick: () => console.log("Maskiner") },
-  ];
 
   return (
     <div>
-      <main className="flex flex-col">
-        <div className="border-b border-gray-300">
-          <h1 className="text-2xl font-bold m-8">Dashboard ✨</h1>
+      <main className="flex flex-col ">
+        <div className="">
+          <h1 className="text-4xl font-bold ml-4 mt-8 mb-5 drop-shadow-xl">Dashboard ✨</h1>
         </div>
 
         <StatsCards stats={stats} />
@@ -47,11 +56,10 @@ function DashboardContent() {
 
         <ReportsSummary
           reports={reports}
-          onManage={() => console.log("Hantera felanmälningar")}
+          onManage={() => navigate("/admin/reports")}
         />
-
-        <QuickActions actions={quickActions} />
       </main>
+      
     </div>
   );
 }

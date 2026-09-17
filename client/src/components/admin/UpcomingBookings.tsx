@@ -9,8 +9,8 @@ function UpcomingBookings({ bookings }: Props) {
     <div className="mx-4 mt-8">
       <h2 className="mb-4 text-lg font-semibold">Kommande bokningar</h2>
 
-      <div className="border border-gray-300">
-        <table className="w-full border-collapse">
+      <div className="border rounded-lg border-gray-300 bg-white shadow-sm overflow-x-auto">
+        <table className="w-full border-collapse min-w-[480px]">
           <thead>
             <tr>
               <th className="border border-gray-300 p-3 text-left">Datum</th>

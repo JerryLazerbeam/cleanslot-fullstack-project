@@ -1,6 +1,6 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, X, UserShield , CalendarDays, LogOut, Moon, Sun } from "lucide-react";
+import { Menu, X, UserShield, CalendarDays, Users, LogOut, Moon, Sun } from "lucide-react";
 
 export default function NavbarAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,16 +34,18 @@ export default function NavbarAdmin() {
     navigate("/");
   }
 
-  const navLinkClass = () =>
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `
       flex items-center gap-3
       px-4 py-3
       rounded-md
-      text-gray-700 dark:text-gray-200
-      hover:bg-gray-100 dark:hover:bg-gray-800
-      hover:text-[#1F5C73]
       transition-colors
-      
+
+      ${
+        isActive
+          ? "bg-[#1F5C73] text-white"
+          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#1F5C73]"
+      }
     `;
 
   const logoutButtonClass = `
@@ -59,13 +61,13 @@ export default function NavbarAdmin() {
 
   return (
     <nav
-      className={`
+      className="
         bg-white dark:bg-[#111C22]
         border-b border-gray-200 dark:border-gray-700
         transition-colors duration-300
-
-       
-      `}
+        lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64
+        lg:border-b-0 lg:border-r lg:z-50
+      "
     >
       {/* Header */}
       <div
@@ -125,14 +127,19 @@ export default function NavbarAdmin() {
         `}
       >
         <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-2">
-          <NavLink to="" className={navLinkClass}>
+          <NavLink to="/admin" end onClick={() => setMenuOpen(false)} className={navLinkClass}>
             <UserShield size={20} />
             <span>Dashboard</span>
           </NavLink>
 
-          <NavLink to="" className={navLinkClass}>
+          <NavLink to="/admin/bookings" onClick={() => setMenuOpen(false)} className={navLinkClass}>
             <CalendarDays size={20} />
             <span>Bokningar</span>
+          </NavLink>
+
+          <NavLink to="/admin/users" onClick={() => setMenuOpen(false)} className={navLinkClass}>
+            <Users size={20} />
+            <span>Användare</span>
           </NavLink>
 
           {/* Dark mode */}
@@ -179,6 +186,76 @@ export default function NavbarAdmin() {
 
           {/* Logout */}
           <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+            <button onClick={handleLogout} className={logoutButtonClass}>
+              <LogOut size={20} />
+              <span>Logga ut</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden lg:flex lg:flex-col lg:px-6 lg:mt-8">
+        <div className="flex flex-col gap-2">
+          <NavLink to="/admin" end className={navLinkClass}>
+            <UserShield size={20} />
+            <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="/admin/bookings" className={navLinkClass}>
+            <CalendarDays size={20} />
+            <span>Bokningar</span>
+          </NavLink>
+
+          <NavLink to="/admin/users" className={navLinkClass}>
+            <Users size={20} />
+            <span>Användare</span>
+          </NavLink>
+
+          {/* Dark mode */}
+          <button
+            onClick={toggleDarkMode}
+            className="
+              flex items-center justify-between
+              px-4 py-3
+              rounded-md
+              text-gray-700 dark:text-gray-200
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              transition-colors
+              mt-4
+            "
+          >
+            <div className="flex items-center gap-3">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+            </div>
+
+            <div
+              className={`
+                relative
+                w-11 h-6
+                rounded-full
+                transition-colors duration-300
+                ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+              `}
+            >
+              <div
+                className={`
+                  absolute
+                  top-1
+                  w-4 h-4
+                  rounded-full
+                  bg-white
+                  shadow-sm
+                  transition-transform duration-300
+                  ${darkMode ? "translate-x-6" : "translate-x-1"}
+                `}
+              />
+            </div>
+          </button>
+
+          {/* Logout */}
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-4">
             <button onClick={handleLogout} className={logoutButtonClass}>
               <LogOut size={20} />
               <span>Logga ut</span>
