@@ -9,6 +9,7 @@ import equipmentRoutes from "./routes/equipment.routes";
 import reportRoutes from "./routes/report.routes";
 import messageRoutes from "./routes/message.routes";
 import organizationMessageRoutes from "./routes/organizationMessage.routes";
+import rulesRoutes from "./routes/rules.routes";
 
 const app = express();
 const PORT = 3000;
@@ -36,6 +37,7 @@ app.use("/api/equipment", equipmentRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/organization-messages", organizationMessageRoutes);
+app.use("/api/rules", rulesRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });

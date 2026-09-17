@@ -80,6 +80,12 @@ CREATE TABLE IF NOT EXISTS organization_messages (
     FOREIGN KEY (organization_id)
         REFERENCES organizations(organization_id)
 );
+CREATE TABLE IF NOT EXISTS rules (
+    rule_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    organization_id INTEGER NOT NULL UNIQUE,
+    content TEXT NOT NULL,
+    FOREIGN KEY (organization_id)
+        REFERENCES organizations(organization_id)
+);
 `);
-
 export default db;

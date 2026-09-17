@@ -43,3 +43,21 @@ insertEquipment.run(organizationId, "Torktumlare 1");
 insertEquipment.run(organizationId, "Torkrum");
 
 console.log("Organization, user and slots created");
+
+const insertRules = db.prepare(`
+  INSERT OR IGNORE INTO rules (organization_id, content)
+  VALUES (?, ?)
+`);
+
+insertRules.run(
+  organizationId,
+  `• Respektera din bokade tvättid.
+
+• Lämna tvättstugan ren och städad.
+
+• Ta bort tvätt och tillhörigheter när din tid är slut.
+
+• Om du inte längre kan nyttja din bokade tid, vänligen avboka den i god tid så att andra kan använda den.
+
+• Felanmäl maskiner som inte fungerar.`,
+);
