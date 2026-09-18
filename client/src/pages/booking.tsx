@@ -1,5 +1,4 @@
 import Navbar from "../components/navbar/navbar";
-import Footer from "../components/footer/footer";
 import BookingCalendar from "../components/booking/BookingCalendar";
 
 function Booking() {
@@ -10,9 +9,6 @@ function Booking() {
       <main className="flex-1 lg:ml-64 flex justify-center items-center mt-10">
         <BookingCalendar />
       </main>
-      <footer className="lg:ml-64">
-        <Footer />
-      </footer>
     </div>
   );
 }

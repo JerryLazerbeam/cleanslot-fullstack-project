@@ -1,5 +1,6 @@
 import type { ReportSummaryItem } from "./adminTypes";
 
+
 type Props = {
   reports: ReportSummaryItem[];
   onManage: () => void;
@@ -7,10 +8,10 @@ type Props = {
 
 function ReportsSummary({ reports, onManage }: Props) {
   return (
-    <div className="mx-4 mt-8">
+    <div className="mx-4 mt-8 mb-10">
       <h2 className="mb-4 text-lg font-semibold">Felanmälningar</h2>
 
-      <div className="border border-gray-300 rounded-lg p-4">
+      <div className="border bg-white border-gray-300 rounded-lg shadow-sm p-4">
         <p className="font-semibold mb-4">{reports.length} nya</p>
 
         {reports.map((report) => (
