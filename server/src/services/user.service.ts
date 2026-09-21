@@ -4,7 +4,7 @@ export function getUserById(userId: number) {
   const user = db
     .prepare(
       `
-      SELECT user_id, username
+      SELECT user_id, username, role
       FROM users
       WHERE user_id = ?
     `,
@@ -13,6 +13,7 @@ export function getUserById(userId: number) {
     | {
         user_id: number;
         username: string;
+        role: string;
       }
     | undefined;
 

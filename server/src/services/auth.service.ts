@@ -4,7 +4,7 @@ export function loginUser(username: string, password: string) {
   const user = db
     .prepare(
       `
-            SELECT user_id, username, password
+            SELECT user_id, username, password, role
             FROM users
             WHERE username = ?
         `,
@@ -14,6 +14,7 @@ export function loginUser(username: string, password: string) {
         user_id: number;
         username: string;
         password: string;
+        role: string;
       }
     | undefined;
   if (!user) {
@@ -24,4 +25,3 @@ export function loginUser(username: string, password: string) {
   }
   return user;
 }
-
