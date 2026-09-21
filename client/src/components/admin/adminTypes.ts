@@ -18,10 +18,11 @@ export type ReportSummaryItem = {
 };
 
 export type User = {
-  id: number;
-  name: string;
-  email: string;
+  user_id: number;
+  username: string;
   role: string;
+  phone: string;
+  email: string;
 };
 
 export type Report = {
@@ -34,4 +35,12 @@ export type Report = {
   status: ReportStatus;
   created_at: string;
   equipment: string;
+};
+
+export type CreateUser = {
+  username: string;
+  password: string;
+  phone: string;
+  email: string;
+  role: string;
 };
