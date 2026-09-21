@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS organizations (
         password TEXT NOT NULL,
         organization_id INTEGER NOT NULL,
         role TEXT NOT NULL DEFAULT 'user',
+        phone TEXT,
+        email TEXT,
         profile_image BLOB,
         profile_image_type TEXT,
         FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
@@ -89,9 +91,13 @@ CREATE TABLE IF NOT EXISTS rules (
         REFERENCES organizations(organization_id)
 );
 `);
-
 try {
   db.exec(`ALTER TABLE reports ADD COLUMN status TEXT NOT NULL DEFAULT 'Ny'`);
-} catch {
-}
+} catch {}
+try {
+  db.exec(`ALTER TABLE users ADD COLUMN phone TEXT`);
+} catch {}
+try {
+  db.exec(`ALTER TABLE users ADD COLUMN email TEXT`);
+} catch {}
 export default db;

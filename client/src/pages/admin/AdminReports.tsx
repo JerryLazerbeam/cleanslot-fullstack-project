@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import NavbarAdmin from "../../components/navbar/navbarAdmin";
 import type { Report, ReportStatus } from "../../components/admin/adminTypes";
 import { getReports, deleteReport } from "../../services/reportService";
-import { Trash } from "lucide-react";
+import { Trash, EllipsisVertical } from "lucide-react";
 import ReportDetailView from "../../components/admin/ReportDetailView";
 
 export default function AdminReports() {
@@ -56,6 +56,8 @@ export default function AdminReports() {
                     <th>Beskrivning</th>
                     <th>Datum</th>
                     <th>Status</th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -72,6 +74,9 @@ export default function AdminReports() {
                         {new Date(r.created_at).toLocaleDateString("sv-SE")}
                       </td>
                       <td>{r.status}</td>
+                      <td>
+                        <EllipsisVertical className="text-gray-400 transition delay-150 duration-300 ease-out hover:-translate-y-0.5 hover:bg-shadow-sm"></EllipsisVertical>{" "}
+                      </td>
                       <td>
                         <button
                           onClick={(e) => {
