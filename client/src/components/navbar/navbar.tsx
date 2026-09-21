@@ -24,6 +24,16 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users/profile", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => setRole(data.role))
+      .catch(() => setRole(null));
+  }, []);
 
   useEffect(() => {
     if (darkMode) {
@@ -234,15 +244,17 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             </div>
           </button>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
-            <button
-              onClick={() => navigate("/admin")}
-              className={adminButtonClass}
-            >
-              <UserShield />
-              <span>Admin</span>
-            </button>
-          </div>
+          {role === "admin" && (
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+              <button
+                onClick={() => navigate("/admin")}
+                className={adminButtonClass}
+              >
+                <UserShield />
+                <span>Admin</span>
+              </button>
+            </div>
+          )}
 
           {/* Logout */}
           <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
@@ -321,15 +333,17 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             </button>
 
             {/* Admin */}
-            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
-              <button
-                onClick={() => navigate("/admin")}
-                className={adminButtonClass}
-              >
-                <UserShield />
-                <span>Admin</span>
-              </button>
-            </div>
+            {role === "admin" && (
+              <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+                <button
+                  onClick={() => navigate("/admin")}
+                  className={adminButtonClass}
+                >
+                  <UserShield />
+                  <span>Admin</span>
+                </button>
+              </div>
+            )}
 
             {/* Logout */}
             <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">

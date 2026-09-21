@@ -8,6 +8,7 @@ import Admin from "./pages/admin/AdminDashboard";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReports from "./pages/admin/AdminReports";
+import AdminRoute from "./components/auth/AdminRoute";
 
 function App() {
   return (
@@ -17,10 +18,38 @@ function App() {
       <Route path="/booking" element={<Booking />} />
       <Route path="/ServiceReport" element={<ServiceReport />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/bookings" element={<AdminBookings />} />
-      <Route path="/admin/users" element={<AdminUsers />} />
-      <Route path="/admin/reports" element={<AdminReports />} />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <Admin />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/bookings"
+        element={
+          <AdminRoute>
+            <AdminBookings />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminRoute>
+            <AdminUsers />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <AdminRoute>
+            <AdminReports />
+          </AdminRoute>
+        }
+      />
     </Routes>
   );
 }

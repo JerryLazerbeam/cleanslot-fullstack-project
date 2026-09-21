@@ -22,9 +22,14 @@ function LoginForm() {
       body: JSON.stringify(loginData),
       credentials: "include",
     });
-
     if (response.ok) {
-      navigate("/booking");
+      const data = await response.json();
+
+      if (data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/booking");
+      }
     } else {
       console.log("Inloggningen misslyckades");
     }

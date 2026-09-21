@@ -22,6 +22,7 @@ export function getProfile(req: Request, res: Response) {
   res.json({
     userId: user.user_id,
     username: user.username,
+    role: user.role,
   });
 }
 export function changePassword(req: Request, res: Response) {
