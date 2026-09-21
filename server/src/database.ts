@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS reports (
     phone TEXT NOT NULL,
     email TEXT NOT NULL,
     description TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Ny',
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id)
         REFERENCES users(user_id)
@@ -88,4 +89,9 @@ CREATE TABLE IF NOT EXISTS rules (
         REFERENCES organizations(organization_id)
 );
 `);
+
+try {
+  db.exec(`ALTER TABLE reports ADD COLUMN status TEXT NOT NULL DEFAULT 'Ny'`);
+} catch {
+}
 export default db;

@@ -23,3 +23,15 @@ export type User = {
   email: string;
   role: string;
 };
+
+export type Report = {
+  report_id: number;
+  user_id: number;
+  username: string;
+  phone: string;
+  email: string;
+  description: string;
+  status: ReportStatus;
+  created_at: string;
+  equipment: string;
+};
