@@ -51,6 +51,7 @@ export function getReports(organizationId: number) {
         reports.phone,
         reports.email,
         reports.description,
+        reports.status,
         reports.created_at,
         GROUP_CONCAT(equipment.name, ', ') AS equipment
       FROM reports
@@ -68,4 +69,22 @@ export function getReports(organizationId: number) {
     .all(organizationId);
 
   return reports;
+}
+export function deleteReport(reportId: number) {
+  const deleteReportTransaction = db.transaction(() => {
+    db.prepare(`DELETE FROM report_equipment WHERE report_id = ?`).run(reportId);
+
+    const result = db.prepare(`DELETE FROM reports WHERE report_id = ?`).run(reportId);
+
+    return result.changes;
+  });
+
+  return deleteReportTransaction();
+}
+export function updateReportStatus(reportId: number, status: string) {
+  const result = db
+    .prepare(`UPDATE reports SET status = ? WHERE report_id = ?`)
+    .run(status, reportId);
+
+  return result.changes;
 }

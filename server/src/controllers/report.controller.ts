@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import db from "../database";
 import { getUserOrganization } from "../services/user.service";
-import { createReport, getReports } from "../services/report.service";
+import { createReport, getReports, deleteReport, updateReportStatus  } from "../services/report.service";
 
 export function createServiceReport(req: Request, res: Response) {
   if (!req.session.userId) {
@@ -102,6 +102,85 @@ export function getOrganizationReports(req: Request, res: Response) {
 
     return res.status(500).json({
       message: "Kunde inte hämta felanmälningar",
+    });
+  }
+}
+export function deleteReportHandler(req: Request, res: Response) {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      message: "Du måste vara inloggad",
+    });
+  }
+
+  const reportId = Number(req.params.id);
+
+  if (Number.isNaN(reportId)) {
+    return res.status(400).json({
+      message: "Ogiltigt id",
+    });
+  }
+
+  try {
+    const deletedRows = deleteReport(reportId);
+
+    if (deletedRows === 0) {
+      return res.status(404).json({
+        message: "Felanmälan hittades inte",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Felanmälan borttagen",
+    });
+  } catch (error) {
+    console.error("Kunde inte ta bort felanmälan:", error);
+
+    return res.status(500).json({
+      message: "Kunde inte ta bort felanmälan",
+    });
+  }
+}
+const ALLOWED_STATUSES = ["Ny", "Pågående", "Åtgärdad"];
+
+export function updateReportStatusHandler(req: Request, res: Response) {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      message: "Du måste vara inloggad",
+    });
+  }
+
+  const reportId = Number(req.params.id);
+  const { status } = req.body;
+
+  if (Number.isNaN(reportId)) {
+    return res.status(400).json({
+      message: "Ogiltigt id",
+    });
+  }
+
+  if (!ALLOWED_STATUSES.includes(status)) {
+    return res.status(400).json({
+      message: "Ogiltig status",
+    });
+  }
+
+  try {
+    const updatedRows = updateReportStatus(reportId, status);
+
+    if (updatedRows === 0) {
+      return res.status(404).json({
+        message: "Felanmälan hittades inte",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Status uppdaterad",
+    });
+  } catch (error) {
+    console.error("Kunde inte uppdatera status:", error);
+
+    return res.status(500).json({
+      message: "Kunde inte uppdatera status",
     });
   }
 }

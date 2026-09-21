@@ -1,8 +1,7 @@
-import type { ReportSummaryItem } from "./adminTypes";
-
+import type { Report } from "./adminTypes";
 
 type Props = {
-  reports: ReportSummaryItem[];
+  reports: Report[];
   onManage: () => void;
 };
 
@@ -16,10 +15,10 @@ function ReportsSummary({ reports, onManage }: Props) {
 
         {reports.map((report) => (
           <div
-            key={report.id}
+            key={report.report_id}
             className="flex justify-between py-2 border-b border-gray-200"
           >
-            <span>{report.machine}</span>
+            <span>{report.equipment}</span>
             <span>{report.status}</span>
           </div>
         ))}
