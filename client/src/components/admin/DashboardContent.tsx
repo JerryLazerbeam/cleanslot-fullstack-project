@@ -5,15 +5,14 @@ import UpcomingBookings from "./UpcomingBookings";
 import ReportsSummary from "./ReportsSummary";
 import type { AdminStat, UpcomingBooking, Report } from "./adminTypes";
 import { getReports } from "../../services/reportService";
+import { getUsers } from "../../services/userService";
+import { getBookings, getSlots } from "../../services/bookingService";
+
 
 function DashboardContent() {
   const navigate = useNavigate();
 
-  const stats: AdminStat[] = [
-    { label: "Bokningar", value: 12, route: "/admin/bookings" },
-    { label: "Ledigt", value: 8, route: "/admin/bookings?view=ledigt" },
-    { label: "Användare", value: 2, route: "/admin/users" },
-  ];
+  const [stats, setStats] = useState<AdminStat[]>([])
 
   const upcomingBookings: UpcomingBooking[] = [
     { id: 1, date: "10/09", time: "10:00–13:00", user: "Anna" },
@@ -26,6 +25,18 @@ function DashboardContent() {
     getReports()
       .then((data) => setReports(data))
       .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    Promise.all([getUsers(), getBookings(), getSlots()])
+    .then(([ users, bookings, slots]) => {
+      setStats ([
+        { label: "Bokningar", value: bookings.length, route: "/admin/bookings" },
+        { label: "Ledigt", value: slots.length - bookings.length, route: "/admin/bookings?view=ledigt" },
+        { label: "Användare", value: users.length, route: "/admin/users" },
+      ]);
+    })
+    .catch((error) => console.log(error))
   }, []);
 
   return (
