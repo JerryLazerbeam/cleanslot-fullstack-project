@@ -6,8 +6,10 @@ const insertOrganization = db.prepare(`
 `);
 
 const organizationInfo = insertOrganization.run("Test Organization");
-
 const organizationId = Number(organizationInfo.lastInsertRowid);
+
+const organizationInfo2 = insertOrganization.run("Test Organization 2");
+const organizationId2 = Number(organizationInfo2.lastInsertRowid);
 
 const insertUser = db.prepare(`
     INSERT INTO users (username, password, organization_id, role)
@@ -17,7 +19,7 @@ const insertUser = db.prepare(`
 insertUser.run("1", "1", organizationId, "user");
 insertUser.run("2", "2", organizationId, "user");
 insertUser.run("a", "a", organizationId, "admin");
-
+insertUser.run("a2", "a2", organizationId2, "admin");
 const insertSlot = db.prepare(`
     INSERT INTO washing_slots (organization_id, date, start_time, end_time)
     VALUES (?, ?, ?, ?)

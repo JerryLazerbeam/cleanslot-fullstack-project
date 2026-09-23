@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   stats: AdminStat[];
+  
 };
 
 function StatsCards({ stats }: Props) {

@@ -66,6 +66,12 @@ export default function AdminReports() {
                       className="cursor-pointer hover:bg-gray-300 dark:hover:bg-white/10"
                       onClick={() => setSelectedReport(r)}
                       key={r.report_id}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          setSelectedReport(r);
+                      }}
                     >
                       <td>{r.username}</td>
                       <td>{r.equipment}</td>
