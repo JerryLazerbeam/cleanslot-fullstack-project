@@ -1,6 +1,7 @@
 export type Equipment = {
   equipment_id: number;
   name: string;
+  is_available: number;
 };
 export type ServiceReport = {
   id: string;
@@ -19,6 +20,7 @@ export type CreateServiceReport = {
 };
 export type Message = {
   message_id: number;
+  title: string | null;
   message: string;
   created_at: string;
   is_read: number;

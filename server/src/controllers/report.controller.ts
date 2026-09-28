@@ -35,12 +35,15 @@ export function createServiceReport(req: Request, res: Response) {
   const equipmentRows = db
     .prepare(
       `
-      SELECT equipment_id
+      SELECT equipment_id, is_available
       FROM equipment
       WHERE organization_id = ?
     `,
     )
-    .all(user.organization_id) as { equipment_id: number }[];
+    .all(user.organization_id) as {
+    equipment_id: number;
+    is_available: number;
+  }[];
 
   const organizationEquipmentIds = equipmentRows.map(
     (item) => item.equipment_id,
@@ -53,6 +56,16 @@ export function createServiceReport(req: Request, res: Response) {
   if (!allEquipmentBelongsToOrganization) {
     return res.status(403).json({
       message: "Du kan inte välja utrustning från en annan förening",
+    });
+  }
+
+  const unavailableSelected = equipmentRows.some(
+    (item) => item.is_available === 0 && equipment.includes(item.equipment_id),
+  );
+
+  if (unavailableSelected) {
+    return res.status(400).json({
+      message: "Maskinen är redan felanmäld och ur funktion",
     });
   }
 

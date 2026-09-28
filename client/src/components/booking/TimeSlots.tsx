@@ -79,7 +79,7 @@ export default function TimeSlots({
                     "flex flex-1 items-center justify-between border px-3 py-2.5 text-sm transition-colors",
 
                     isTaken
-                      ? "line-through border-[#D8DEE2] bg-[#ff000077] text-black cursor-not-allowed dark:bg-[#ff00007c] dark:border-[#1F5C73]"
+                      ? "line-through border-[#D8DEE2] bg-[#ff000077] text-black cursor-not-allowed dark:bg-[#ff00007c] dark:text-white dark:border-[#1F5C73]"
                       : hasExistingBooking
                         ? "border-[#D8DEE2] bg-gray-100 text-gray-400 cursor-not-allowed opacity-60 dark:bg-[#111C22] dark:border-gray-700 "
                         : isMine

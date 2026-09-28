@@ -1,6 +1,10 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
+  getUnreadCount,
+  MESSAGES_CHANGED,
+} from "../../services/messageService";
+import {
   Menu,
   X,
   User,
@@ -25,6 +29,31 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
     return localStorage.getItem("theme") === "dark";
   });
   const [role, setRole] = useState<string | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    function loadUnread() {
+      getUnreadCount()
+        .then((count) => setUnreadCount(count))
+        .catch(() => setUnreadCount(0));
+    }
+
+    loadUnread();
+
+    // Uppdatera när ett meddelande läses på profilsidan
+    window.addEventListener(MESSAGES_CHANGED, loadUnread);
+    return () => window.removeEventListener(MESSAGES_CHANGED, loadUnread);
+  }, []);
+
+  const unreadBadge =
+    unreadCount > 0 ? (
+      <span
+        className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-semibold text-white"
+        aria-label={`${unreadCount} olästa meddelanden`}
+      >
+        {unreadCount}
+      </span>
+    ) : null;
 
   useEffect(() => {
     fetch("http://localhost:3000/api/users/profile", {
@@ -146,7 +175,12 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           "
           aria-label="Öppna meny"
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          <span className="relative block">
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {!menuOpen && unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-red-600" />
+            )}
+          </span>
         </button>
       </div>
 
@@ -174,6 +208,7 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           >
             <User size={20} />
             <span>Min profil</span>
+            {unreadBadge}
           </NavLink>
 
           <NavLink
@@ -273,6 +308,7 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             <NavLink to="/profile" className={navLinkClass}>
               <User size={20} />
               <span>Min profil</span>
+              {unreadBadge}
             </NavLink>
 
             <NavLink to="/booking" className={navLinkClass}>

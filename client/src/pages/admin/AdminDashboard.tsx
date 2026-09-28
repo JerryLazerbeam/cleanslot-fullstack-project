@@ -3,7 +3,7 @@ import DashboardContent from "../../components/admin/DashboardContent";
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
+    <div className="flex-1 flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
       <NavbarAdmin />
       <main className="flex-1 lg:ml-64">
         <DashboardContent />

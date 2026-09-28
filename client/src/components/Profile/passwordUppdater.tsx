@@ -83,7 +83,7 @@ function PasswordUpdater() {
           <section className="mt-8 flex flex-col items-center">
             <div
               onClick={handleImageClick}
-              className="group relative h-36 w-36 cursor-pointer overflow-hidden rounded-full bg-gray-300 shadow-md sm:h-44 sm:w-44"
+              className="group relative h-36 w-36 cursor-pointer overflow-hidden rounded-full bg-gray-300 dark:bg-gray-600 shadow-md sm:h-44 sm:w-44"
             >
               <img
                 src={preview}

@@ -71,7 +71,7 @@ function ReportForm() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] lg:ml-64 px-4 py-6 sm:px-6 md:py-10">
+    <main className="flex-1 bg-[#f8f9fb] dark:bg-[#111C22] dark:text-[#C7CED1] lg:ml-64 px-4 py-6 sm:px-6 md:py-10">
       <form onSubmit={handleSubmit}>
         <section className="mx-auto w-full max-w-3xl rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-none dark:bg-[#16242C] dark:shadow-none sm:p-8">
           {/* Titel */}
@@ -123,21 +123,37 @@ function ReportForm() {
             </h2>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              {equipment.map((item) => (
-                <label
-                  key={item.equipment_id}
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-4 transition hover:border-[#1F5C73] dark:border-gray-700"
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.equipment.includes(item.equipment_id)}
-                    onChange={() => handleEquipmentChange(item.equipment_id)}
-                    className="h-4 w-4 accent-[#1F5C73]"
-                  />
+              {equipment.map((item) => {
+                const isUnavailable = item.is_available === 0;
 
-                  <span>{item.name}</span>
-                </label>
-              ))}
+                return (
+                  <label
+                    key={item.equipment_id}
+                    className={`flex items-center gap-3 rounded-lg border border-gray-200 p-4 transition dark:border-gray-700 ${
+                      isUnavailable
+                        ? "cursor-not-allowed opacity-50"
+                        : "cursor-pointer hover:border-[#1F5C73]"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      disabled={isUnavailable}
+                      checked={formData.equipment.includes(item.equipment_id)}
+                      onChange={() => handleEquipmentChange(item.equipment_id)}
+                      className="h-4 w-4 accent-[#1F5C73]"
+                    />
+
+                    <span>
+                      {item.name}
+                      {isUnavailable && (
+                        <span className="block text-xs text-gray-500">
+                          Redan felanmäld – ur funktion
+                        </span>
+                      )}
+                    </span>
+                  </label>
+                );
+              })}
             </div>
           </section>
 

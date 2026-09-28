@@ -17,11 +17,12 @@ export function getRules(organizationId: number) {
 }
 
 export function updateRules(organizationId: number, content: string) {
+  // Skapar reglerna om de inte finns, annars uppdateras de
   const statement = db.prepare(`
-    UPDATE rules
-    SET content = ?
-    WHERE organization_id = ?
+    INSERT INTO rules (organization_id, content)
+    VALUES (?, ?)
+    ON CONFLICT (organization_id) DO UPDATE SET content = excluded.content
   `);
 
-  return statement.run(content, organizationId);
+  return statement.run(organizationId, content);
 }

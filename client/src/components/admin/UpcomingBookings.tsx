@@ -9,24 +9,34 @@ function UpcomingBookings({ bookings }: Props) {
     <div className="mx-4 mt-8">
       <h2 className="mb-4 text-lg font-semibold">Kommande bokningar</h2>
 
-      <div className="border rounded-lg border-gray-300 bg-white shadow-sm overflow-x-auto">
-        <table className="w-full border-collapse min-w-[480px]">
+      <div className="border rounded-lg border-gray-300 bg-white shadow-sm overflow-x-auto dark:bg-[#16242C]">
+        <table className="w-full border-collapse min-w-480px">
           <thead>
             <tr>
               <th className="border border-gray-300 p-3 text-left">Datum</th>
               <th className="border border-gray-300 p-3 text-left">Tid</th>
-              <th className="border border-gray-300 p-3 text-left">Användare</th>
+              <th className="border border-gray-300 p-3 text-left">
+                Användare
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td className="border border-gray-300 p-3">{booking.date}</td>
-                <td className="border border-gray-300 p-3">{booking.time}</td>
-                <td className="border border-gray-300 p-3">{booking.user}</td>
+            {bookings.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="p-3 text-center text-gray-400">
+                  Inga bokningar de kommande 7 dagarna
+                </td>
               </tr>
-            ))}
+            ) : (
+              bookings.map((booking) => (
+                <tr key={booking.id}>
+                  <td className="border border-gray-300 p-3">{booking.date}</td>
+                  <td className="border border-gray-300 p-3">{booking.time}</td>
+                  <td className="border border-gray-300 p-3">{booking.user}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

@@ -19,7 +19,7 @@ function StatsCards({ stats }: Props) {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") navigate(stat.route);
           }}
-          className="flex flex-col border rounded-lg border-gray-300 drop-shadow-sm px-5 cursor-pointer bg-white hover:bg-gray-100"
+          className="flex flex-col border rounded-lg border-gray-300 drop-shadow-sm px-5 cursor-pointer bg-white hover:bg-gray-100 dark:bg-[#16242C] dark:hover:bg-[#1F5C73]/40"
         >
           <h1 className="py-5">{stat.value}</h1>
           <p className="py-5">{stat.label}</p>

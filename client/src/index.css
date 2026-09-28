@@ -6,10 +6,34 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+/* Mörkt läge: webbläsarens egna kontroller (select-listor, datumväljare, scrollbar) */
+.dark {
+  color-scheme: dark;
+}
+
+/* Mörkt läge: dämpa de ljusa grå kanterna som används på många sidor */
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .divide-gray-200 > * + * {
+  border-color: #2a3b44;
+}
+
 .font-display {
   font-family: "Space Grotesk", sans-serif;
 }
 
 .font-body {
   font-family: "Inter", sans-serif;
+}
+
+/* Mörkt läge: webbläsarens egna kontroller (select-listor, datumväljare, scrollbar) */
+.dark {
+  color-scheme: dark;
+}
+
+/* Mörkt läge: dämpa de ljusa grå kanterna som används på många sidor */
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .divide-gray-200 > * + * {
+  border-color: #2a3b44;
 }

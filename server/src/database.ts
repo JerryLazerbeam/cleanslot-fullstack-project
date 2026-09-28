@@ -100,4 +100,23 @@ try {
 try {
   db.exec(`ALTER TABLE users ADD COLUMN email TEXT`);
 } catch {}
+try {
+  db.exec(`ALTER TABLE messages ADD COLUMN title TEXT`);
+} catch {}
+try {
+  db.exec(
+    `ALTER TABLE equipment ADD COLUMN is_available INTEGER NOT NULL DEFAULT 1`,
+  );
+} catch {}
+db.exec(`
+CREATE TABLE IF NOT EXISTS booking_reminders (
+    reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    booking_id INTEGER NOT NULL,
+    minutes_before INTEGER NOT NULL,
+    sent INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (booking_id)
+        REFERENCES bookings(booking_id),
+    UNIQUE (booking_id, minutes_before)
+);
+`);
 export default db;

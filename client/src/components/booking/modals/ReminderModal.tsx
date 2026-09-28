@@ -2,12 +2,14 @@ interface ReminderModalProps {
   reminders: number[];
   onToggleReminder: (minutes: number) => void;
   onClose: () => void;
+  onSave: () => void;
 }
 
 export default function ReminderModal({
   reminders,
   onToggleReminder,
   onClose,
+  onSave,
 }: ReminderModalProps) {
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 px-4">
@@ -17,6 +19,7 @@ export default function ReminderModal({
 
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Välj när du vill bli notifierad innan din bokade tvättid börjar.
+            Påminnelsen kommer som ett meddelande under Profil.
           </p>
         </div>
 
@@ -66,7 +69,7 @@ export default function ReminderModal({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={onSave}
             className="flex-1 rounded-sm bg-[#1F5C73] px-4 py-2 text-white transition-colors hover:bg-[#17485A]"
           >
             Spara
