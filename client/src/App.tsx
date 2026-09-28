@@ -8,6 +8,8 @@ import Admin from "./pages/admin/AdminDashboard";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReports from "./pages/admin/AdminReports";
+import AdminLaundry from "./pages/admin/AdminLaundry";
+import AdminSettings from "./pages/admin/AdminSettings";
 import AdminRoute from "./components/auth/AdminRoute";
 
 function App() {
@@ -47,6 +49,22 @@ function App() {
         element={
           <AdminRoute>
             <AdminReports />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/laundry"
+        element={
+          <AdminRoute>
+            <AdminLaundry />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/settings"
+        element={
+          <AdminRoute>
+            <AdminSettings />
           </AdminRoute>
         }
       />

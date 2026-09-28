@@ -1,6 +1,6 @@
 export default function BookingLegend() {
   return (
-    <div className="flex items-center gap-4 mt-6 font-body text-xs text-[#5A6B73]">
+    <div className="flex items-center gap-4 mt-6 font-body text-xs text-[#5A6B73] dark:text-gray-400">
       <span className="flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 rounded-full bg-[#3FA796]" />
         Lediga tider

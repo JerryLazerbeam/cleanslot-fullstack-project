@@ -21,7 +21,7 @@ function ViewToggle({ view, onChange }: Props) {
           className={`px-4 py-2 ${
             view === opt.value
               ? "bg-[#1F5C73] text-white"
-              : "hover:bg-gray-100"
+              : "hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
           {opt.label}

@@ -10,6 +10,8 @@ import {
   bookSlot,
   getBookings,
   deleteBooking,
+  getReminders,
+  saveReminders,
 } from "../../services/bookingService";
 import { getProfile } from "../../services/userService";
 
@@ -153,7 +155,10 @@ export default function BookingCalendar() {
             convertedBookings[booking.date][slotId] =
               booking.user_id === currentUserId ? "mig" : "annan";
 
-            if (booking.user_id === currentUserId) {
+            if (
+              booking.user_id === currentUserId &&
+              booking.date >= dateKey(new Date())
+            ) {
               setMyBooking({
                 date: booking.date,
                 slotId: slotId,
@@ -173,6 +178,39 @@ export default function BookingCalendar() {
     date: string;
     slotId: string;
   } | null>(null);
+
+  const myBackendBooking = myBooking
+    ? backendBookings.find(
+        (booking) =>
+          `s${booking.slot_id}` === myBooking.slotId &&
+          booking.user_id === currentUserId,
+      )
+    : undefined;
+
+  const myBookingId = myBackendBooking?.booking_id;
+
+  useEffect(() => {
+    if (!myBookingId) return;
+
+    getReminders(myBookingId)
+      .then((data) => setReminders(data))
+      .catch((error) => console.error(error));
+  }, [myBookingId]);
+
+  async function handleSaveReminders() {
+    setShowReminderModal(false);
+
+    // Ingen bokning än – påminnelserna sparas när bokningen görs
+    if (!myBookingId) return;
+
+    try {
+      await saveReminders(myBookingId, reminders);
+      alert("Påminnelsen är sparad. Den kommer som ett meddelande under Profil.");
+    } catch (error) {
+      console.error(error);
+      alert("Kunde inte spara påminnelsen");
+    }
+  }
 
   useEffect(() => {
     getSlots()
@@ -336,6 +374,16 @@ export default function BookingCalendar() {
 
       const updatedBookings = await getBookings();
       setBackendBookings(updatedBookings);
+
+      const newBooking = updatedBookings.find(
+        (booking: { booking_id: number; user_id: number; slot_id: number }) =>
+          `s${booking.slot_id}` === mySlot &&
+          booking.user_id === currentUserId,
+      );
+
+      if (newBooking && reminders.length > 0) {
+        await saveReminders(newBooking.booking_id, reminders);
+      }
 
       alert("Tvättiden är bokad!");
     } catch (error) {
@@ -506,6 +554,7 @@ export default function BookingCalendar() {
                     });
 
                     setMyBooking(null);
+                    setReminders([]);
                   }}
                   className="mt-4 rounded-md border border-red-500 px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors"
                 >
@@ -593,6 +642,7 @@ export default function BookingCalendar() {
           reminders={reminders}
           onToggleReminder={toggleReminder}
           onClose={() => setShowReminderModal(false)}
+          onSave={handleSaveReminders}
         />
       )}
     </>

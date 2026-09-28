@@ -25,7 +25,7 @@ function ReportDetailView({ report, onClose, onStatusChange }: Props) {
       <div className="bg-white dark:bg-[#16242C] rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Felanmälan</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
             ✕
           </button>
         </div>

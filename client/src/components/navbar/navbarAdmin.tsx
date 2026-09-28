@@ -1,6 +1,17 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, X, UserShield, CalendarDays, Users, LogOut, Moon, Sun } from "lucide-react";
+import {
+  Menu,
+  X,
+  UserShield,
+  CalendarDays,
+  Users,
+  LogOut,
+  Moon,
+  Sun,
+  WashingMachine,
+  Settings,
+} from "lucide-react";
 
 export default function NavbarAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -142,6 +153,16 @@ export default function NavbarAdmin() {
             <span>Användare</span>
           </NavLink>
 
+          <NavLink to="/admin/laundry" onClick={() => setMenuOpen(false)} className={navLinkClass}>
+            <WashingMachine size={20} />
+            <span>Tvättstugor</span>
+          </NavLink>
+
+          <NavLink to="/admin/settings" onClick={() => setMenuOpen(false)} className={navLinkClass}>
+            <Settings size={20} />
+            <span>Inställningar</span>
+          </NavLink>
+
           {/* Dark mode */}
           <button
             onClick={toggleDarkMode}
@@ -149,7 +170,7 @@ export default function NavbarAdmin() {
               flex items-center justify-between
               px-4 py-3
               rounded-md
-              text-gray-700
+              text-gray-700 dark:text-gray-200
               hover:bg-gray-100 dark:hover:bg-gray-800
               hover:text-[#1F5C73]
               transition-colors
@@ -210,6 +231,16 @@ export default function NavbarAdmin() {
           <NavLink to="/admin/users" className={navLinkClass}>
             <Users size={20} />
             <span>Användare</span>
+          </NavLink>
+
+          <NavLink to="/admin/laundry" className={navLinkClass}>
+            <WashingMachine size={20} />
+            <span>Tvättstugor</span>
+          </NavLink>
+
+          <NavLink to="/admin/settings" className={navLinkClass}>
+            <Settings size={20} />
+            <span>Inställningar</span>
           </NavLink>
 
           {/* Dark mode */}

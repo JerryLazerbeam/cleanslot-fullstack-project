@@ -5,6 +5,7 @@ import {
   createUserMessage,
   getUserMessages,
   markUserMessageAsRead,
+  broadcastMessage,
 } from "../controllers/message.controller";
 
 const router = Router();
@@ -12,6 +13,8 @@ const router = Router();
 router.get("/", requireLogin, getUserMessages);
 
 router.post("/", requireLogin, requireAdmin, createUserMessage);
+
+router.post("/broadcast", requireLogin, requireAdmin, broadcastMessage);
 
 router.put("/:messageId/read", requireLogin, markUserMessageAsRead);
 

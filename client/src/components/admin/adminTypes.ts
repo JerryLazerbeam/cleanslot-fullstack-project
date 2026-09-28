@@ -44,3 +44,24 @@ export type CreateUser = {
   email: string;
   role: string;
 };
+export type ApiAdminSlot = {
+  slot_id: number;
+  date: string;
+  start_time: string;
+  end_time: string;
+  booking_id: number | null;
+  username: string | null;
+};
+export type ApiUpcomingBooking = {
+  booking_id: number;
+  username: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+};
+export type AdminEquipment = {
+  equipment_id: number;
+  name: string;
+  is_available: number;
+  open_reports: number;
+};

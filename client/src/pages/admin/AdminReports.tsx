@@ -35,7 +35,7 @@ export default function AdminReports() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
+    <div className="flex-1 flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
       <NavbarAdmin />
       <main className="flex-1 flex items-center justify-center p-4 py-10 sm:p-8 lg:pl-64">
         <div className="p-4 py-10 sm:p-8 sm:py-25 max-w-4xl w-full border rounded-lg border-gray-300 shadow-sm">
