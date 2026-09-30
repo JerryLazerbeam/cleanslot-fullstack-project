@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  getUnreadCount,
+  MESSAGES_CHANGED,
+} from "../../services/messageService";
 import {
   Menu,
   X,
@@ -8,6 +12,9 @@ import {
   TriangleAlert,
   BookOpen,
   LogOut,
+  Moon,
+  Sun,
+  UserShield,
 } from "lucide-react";
 
 type NavBarProps = {
@@ -16,26 +23,113 @@ type NavBarProps = {
 
 export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Bestämmer hur en navigeringslänk ska se ut
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+  const [role, setRole] = useState<string | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    function loadUnread() {
+      getUnreadCount()
+        .then((count) => setUnreadCount(count))
+        .catch(() => setUnreadCount(0));
+    }
+
+    loadUnread();
+
+    // Uppdatera när ett meddelande läses på profilsidan
+    window.addEventListener(MESSAGES_CHANGED, loadUnread);
+    return () => window.removeEventListener(MESSAGES_CHANGED, loadUnread);
+  }, []);
+
+  const unreadBadge =
+    unreadCount > 0 ? (
+      <span
+        className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-semibold text-white"
+        aria-label={`${unreadCount} olästa meddelanden`}
+      >
+        {unreadCount}
+      </span>
+    ) : null;
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users/profile", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => setRole(data.role))
+      .catch(() => setRole(null));
+  }, []);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  function toggleDarkMode() {
+    setDarkMode((prev) => !prev);
+  }
+
+  async function handleLogout() {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    setMenuOpen(false);
+    navigate("/");
+  }
+
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `
       flex items-center gap-3
       px-4 py-3
       rounded-md
       transition-all duration-200
+
       ${
         isActive
           ? "bg-[#1F5C73] text-white"
-          : "text-gray-700 hover:bg-gray-100 hover:text-[#1F5C73]"
+          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#1F5C73]"
       }
     `;
+
+  const logoutButtonClass = `
+    w-full
+    flex items-center gap-3
+    px-4 py-3
+    rounded-md
+    text-gray-700 dark:text-gray-200
+    hover:bg-gray-100 dark:hover:bg-gray-800
+    hover:text-[#1F5C73]
+    transition-all duration-200
+  `;
+
+  const adminButtonClass = `
+    w-full
+    flex items-center gap-3
+    px-4 py-3
+    rounded-md
+    text-gray-700 dark:text-gray-200
+    hover:bg-gray-100 dark:hover:bg-gray-800
+    hover:text-[#1F5C73]
+    transition-all duration-200
+  `;
 
   return (
     <nav
       className={`
-        bg-white
-        border-b border-gray-200
+        bg-white dark:bg-[#111C22]
+        border-b border-gray-200 dark:border-gray-700
+        transition-colors duration-300
 
         ${
           !hideDesktopSidebar
@@ -49,36 +143,44 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
         className="
           max-w-6xl
           mx-auto
-          px-4
-          py-4
-          flex
-          items-center
-          justify-between
-
-          lg:px-6
-          lg:py-6
+          px-4 py-4
+          flex items-center justify-between
+          lg:px-6 lg:py-6
         "
       >
         <NavLink to="/booking">
           <img
             src="../images/logoclean.png"
             alt="CleanSlot Logo"
-            className="h-10 w-auto"
+            className="h-10 w-auto block dark:hidden"
+          />
+
+          <img
+            src="../images/CleanSlot-Logo-Darkmode.png"
+            alt="CleanSlot Logo"
+            className="h-10 w-auto hidden dark:block"
           />
         </NavLink>
 
-        {/* Hamburger - endast mobil */}
+        {/* Hamburger - mobil */}
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)}
           className="
             p-2
             rounded-md
-            hover:bg-gray-100
+            text-gray-700 dark:text-gray-200
+            hover:bg-gray-100 dark:hover:bg-gray-800
+            transition-colors
             lg:hidden
           "
           aria-label="Öppna meny"
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          <span className="relative block">
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {!menuOpen && unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-red-600" />
+            )}
+          </span>
         </button>
       </div>
 
@@ -86,21 +188,19 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
       <div
         className={`
           overflow-hidden
-          border-t border-gray-200
-          bg-white
+          border-t border-gray-200 dark:border-gray-700
+          bg-white dark:bg-[#111C22]
           lg:hidden
-          transition-all
-          duration-300
-          ease-in-out
+          transition-all duration-300 ease-in-out
+
           ${
             menuOpen
-              ? "max-h-96 opacity-100 translate-y-0"
+              ? "max-h-150 opacity-100 translate-y-0"
               : "max-h-0 opacity-0 -translate-y-2"
           }
         `}
       >
         <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-2">
-          {/* Min profil */}
           <NavLink
             to="/profile"
             onClick={() => setMenuOpen(false)}
@@ -108,9 +208,9 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
           >
             <User size={20} />
             <span>Min profil</span>
+            {unreadBadge}
           </NavLink>
 
-          {/* Boka tvättid */}
           <NavLink
             to="/booking"
             onClick={() => setMenuOpen(false)}
@@ -120,9 +220,8 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             <span>Boka tvättid</span>
           </NavLink>
 
-          {/* Felanmälan */}
           <NavLink
-            to="/serviceReport"
+            to="/ServiceReport"
             onClick={() => setMenuOpen(false)}
             className={navLinkClass}
           >
@@ -130,7 +229,6 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             <span>Felanmälan</span>
           </NavLink>
 
-          {/* Regler */}
           <NavLink
             to="/rules"
             onClick={() => setMenuOpen(false)}
@@ -140,16 +238,65 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
             <span>Regler</span>
           </NavLink>
 
-          {/* Logga ut */}
-          <div className="border-t border-gray-200 mt-2 pt-2">
-            <NavLink
-              to="/"
-              onClick={() => setMenuOpen(false)}
-              className={navLinkClass}
+          {/* Dark mode */}
+          <button
+            onClick={toggleDarkMode}
+            className="
+              flex items-center justify-between
+              px-4 py-3
+              rounded-md
+              text-gray-700 dark:text-gray-200
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              transition-colors
+            "
+          >
+            <div className="flex items-center gap-3">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+            </div>
+
+            <div
+              className={`
+                relative
+                w-11 h-6
+                rounded-full
+                transition-colors duration-300
+                ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+              `}
             >
+              <div
+                className={`
+                  absolute
+                  top-1
+                  w-4 h-4
+                  rounded-full
+                  bg-white
+                  shadow-sm
+                  transition-transform duration-300
+                  ${darkMode ? "translate-x-6" : "translate-x-1"}
+                `}
+              />
+            </div>
+          </button>
+
+          {role === "admin" && (
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+              <button
+                onClick={() => navigate("/admin")}
+                className={adminButtonClass}
+              >
+                <UserShield />
+                <span>Admin</span>
+              </button>
+            </div>
+          )}
+
+          {/* Logout */}
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+            <button onClick={handleLogout} className={logoutButtonClass}>
               <LogOut size={20} />
               <span>Logga ut</span>
-            </NavLink>
+            </button>
           </div>
         </div>
       </div>
@@ -158,36 +305,88 @@ export default function Navbar({ hideDesktopSidebar = false }: NavBarProps) {
       {!hideDesktopSidebar && (
         <div className="hidden lg:flex lg:flex-col lg:px-6 lg:mt-8">
           <div className="flex flex-col gap-2">
-            {/* Min profil */}
             <NavLink to="/profile" className={navLinkClass}>
               <User size={20} />
               <span>Min profil</span>
+              {unreadBadge}
             </NavLink>
 
-            {/* Boka tvättid */}
             <NavLink to="/booking" className={navLinkClass}>
               <CalendarDays size={20} />
               <span>Boka tvättid</span>
             </NavLink>
 
-            {/* Felanmälan */}
             <NavLink to="/serviceReport" className={navLinkClass}>
               <TriangleAlert size={20} />
               <span>Felanmälan</span>
             </NavLink>
 
-            {/* Regler */}
             <NavLink to="/rules" className={navLinkClass}>
               <BookOpen size={20} />
               <span>Regler</span>
             </NavLink>
 
-            {/* Logga ut */}
-            <div className="border-t border-gray-200 mt-6 pt-4">
-              <NavLink to="/" className={navLinkClass}>
+            {/* Dark mode */}
+            <button
+              onClick={toggleDarkMode}
+              className="
+                flex items-center justify-between
+                px-4 py-3
+                rounded-md
+                text-gray-700 dark:text-gray-200
+                hover:bg-gray-100 dark:hover:bg-gray-800
+                transition-colors
+                mt-4
+              "
+            >
+              <div className="flex items-center gap-3">
+                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                <span>{darkMode ? "Ljust läge" : "Mörkt läge"}</span>
+              </div>
+
+              <div
+                className={`
+                  relative
+                  w-11 h-6
+                  rounded-full
+                  transition-colors duration-300
+                  ${darkMode ? "bg-[#1F5C73]" : "bg-gray-300"}
+                `}
+              >
+                <div
+                  className={`
+                    absolute
+                    top-1
+                    w-4 h-4
+                    rounded-full
+                    bg-white
+                    shadow-sm
+                    transition-transform duration-300
+                    ${darkMode ? "translate-x-6" : "translate-x-1"}
+                  `}
+                />
+              </div>
+            </button>
+
+            {/* Admin */}
+            {role === "admin" && (
+              <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+                <button
+                  onClick={() => navigate("/admin")}
+                  className={adminButtonClass}
+                >
+                  <UserShield />
+                  <span>Admin</span>
+                </button>
+              </div>
+            )}
+
+            {/* Logout */}
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+              <button onClick={handleLogout} className={logoutButtonClass}>
                 <LogOut size={20} />
                 <span>Logga ut</span>
-              </NavLink>
+              </button>
             </div>
           </div>
         </div>

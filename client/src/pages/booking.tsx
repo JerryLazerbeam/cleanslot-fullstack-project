@@ -3,14 +3,13 @@ import BookingCalendar from "../components/booking/BookingCalendar";
 
 function Booking() {
   return (
-    <>
+    <div className="flex-1 flex flex-col bg-[#f8f9fb] dark:bg-[#111C22]">
       <Navbar />
-      <main className="lg:ml-64 min-h-screen bg-[#f8f9fb]">
-        <div className="flex justify-center items-center min-h-screen bg-[#f8f9fb]">
-          <BookingCalendar />
-        </div>
+
+      <main className="flex-1 lg:ml-64 flex justify-center items-center mt-10">
+        <BookingCalendar />
       </main>
-    </>
+    </div>
   );
 }
 

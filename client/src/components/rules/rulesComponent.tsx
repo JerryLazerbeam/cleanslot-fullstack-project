@@ -1,33 +1,44 @@
-function Rules() {
-  return (
-    <div className="min-h-screen flex flex-col items-center">
-      <h1 className="pt-10 text-black text-3xl font-bold p-4">
-        Tvättstugans regler
-      </h1>
-      <p className="m-8 max-w-2xl text-sm font-semibold">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-      <div className="flex items-center gap-2">
-        <input type="checkbox" id="rules" />
+import { useEffect, useState } from "react";
+import { getRules } from "../../services/rulesService";
 
-        <label htmlFor="rules" className="text-sm font-medium text-gray-700">
-          Visa inte igen
-        </label>
+const DEFAULT_RULES = [
+  "Respektera din bokade tvättid.",
+  "Lämna tvättstugan ren och städad.",
+  "Ta bort tvätt och tillhörigheter när din tid är slut.",
+  "Om du inte längre kan nyttja din bokade tid, vänligen avboka den i god tid så att andra kan använda den.",
+  "Felanmäl maskiner som inte fungerar.",
+];
+
+function Rules() {
+  const [rules, setRules] = useState<string[]>(DEFAULT_RULES);
+
+  useEffect(() => {
+    getRules()
+      .then((data) => {
+        if (!data?.content) return;
+
+        // En regel per rad, utan tomma rader och inledande "•"
+        const lines = data.content
+          .split("\n")
+          .map((line) => line.replace(/^•\s*/, "").trim())
+          .filter(Boolean);
+
+        if (lines.length > 0) setRules(lines);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  return (
+    <div className="px-4">
+      <div className="mx-auto mt-10 w-full max-w-2xl rounded-xl border border-gray-200 bg-white p-6 text-[#16242C] shadow-lg dark:border-none dark:bg-[#16242C] dark:text-[#C7CED1] dark:shadow-none sm:p-8">
+        <h1 className="text-center text-3xl font-bold">Förhållningsregler</h1>
+
+        <div className="mt-8 space-y-4 text-left">
+          {rules.map((rule, i) => (
+            <p key={i}>• {rule}</p>
+          ))}
+        </div>
       </div>
-      <a href="/booking">
-        <button className="mt-8 text-white text-lg font-semibold bg-[#1F5C73] border focus:border-dark p-3 px-7  hover:bg-gray-700 rounded-md shadow-xl ">
-          Boka tvättid
-        </button>
-      </a>
     </div>
   );
 }

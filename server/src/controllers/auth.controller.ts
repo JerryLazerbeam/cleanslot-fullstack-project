@@ -14,6 +14,7 @@ export function login(req: Request, res: Response) {
   req.session.userId = user.user_id;
   return res.json({
     message: "Inloggning lyckades",
+    role: user.role,
   });
 }
 export function logout(req: Request, res: Response) {

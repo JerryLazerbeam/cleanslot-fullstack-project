@@ -1,1 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Mörkt läge: webbläsarens egna kontroller (select-listor, datumväljare, scrollbar) */
+.dark {
+  color-scheme: dark;
+}
+
+/* Mörkt läge: dämpa de ljusa grå kanterna som används på många sidor */
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .divide-gray-200 > * + * {
+  border-color: #2a3b44;
+}
+
+.font-display {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.font-body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Mörkt läge: webbläsarens egna kontroller (select-listor, datumväljare, scrollbar) */
+.dark {
+  color-scheme: dark;
+}
+
+/* Mörkt läge: dämpa de ljusa grå kanterna som används på många sidor */
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .divide-gray-200 > * + * {
+  border-color: #2a3b44;
+}
