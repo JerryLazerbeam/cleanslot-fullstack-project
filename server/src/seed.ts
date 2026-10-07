@@ -1,4 +1,5 @@
 import db from "./database";
+import { hashPassword } from "./services/password.service";
 
 const insertOrganization = db.prepare(`
     INSERT INTO organizations (name)
@@ -16,10 +17,10 @@ const insertUser = db.prepare(`
     VALUES (?, ?, ?, ?)
 `);
 
-insertUser.run("1", "1", organizationId, "user");
-insertUser.run("2", "2", organizationId, "user");
-insertUser.run("a", "a", organizationId, "admin");
-insertUser.run("a2", "a2", organizationId2, "admin");
+insertUser.run("1", hashPassword("1"), organizationId, "user");
+insertUser.run("2", hashPassword("2"), organizationId, "user");
+insertUser.run("a", hashPassword("a"), organizationId, "admin");
+insertUser.run("a2", hashPassword("a2"), organizationId2, "admin");
 const insertSlot = db.prepare(`
     INSERT INTO washing_slots (organization_id, date, start_time, end_time)
     VALUES (?, ?, ?, ?)
