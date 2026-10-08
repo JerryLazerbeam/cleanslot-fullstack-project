@@ -1,4 +1,5 @@
 import db from "../database";
+import { hashPassword } from "./password.service";
 
 export function getUserById(userId: number) {
   const user = db
@@ -26,7 +27,7 @@ export function updatePassword(userId: number, newPassword: string) {
     WHERE user_id = ?
   `);
 
-  return statement.run(newPassword, userId);
+  return statement.run(hashPassword(newPassword), userId);
 }
 export function updateProfileImage(
   userId: number,
@@ -75,44 +76,43 @@ export function getUserOrganization(userId: number) {
         organization_id: number;
       }
     | undefined;
-    return user;
+  return user;
 }
 
- export function createUser(
-    username: string,
-    password: string,
-    phone: string, 
-    email: string,
-    role: string,
-    organizationId: number,
-  ) {
-    const result = db
-      .prepare(
-        `
+export function createUser(
+  username: string,
+  password: string,
+  phone: string,
+  email: string,
+  role: string,
+  organizationId: number,
+) {
+  const result = db
+    .prepare(
+      `
       INSERT INTO users (username, password, organization_id, role,  phone, email)
       VALUES (?, ?, ?, ?, ?, ?)
     `,
-      )
-      .run(username, password, organizationId, role, phone, email);
+    )
+    .run(username, hashPassword(password), organizationId, role, phone, email);
 
-    return Number(result.lastInsertRowid);
-  }
+  return Number(result.lastInsertRowid);
+}
 
- export function getUsersByOrganization(organizationId: number) {
-    return db
-      .prepare(
-        `
+export function getUsersByOrganization(organizationId: number) {
+  return db
+    .prepare(
+      `
       SELECT user_id, username, role,  phone, email
       FROM users
       WHERE organization_id = ?
       ORDER BY username
     `,
-      )
-      .all(organizationId);
-  }
-  export function deleteUser(userId: number) {
+    )
+    .all(organizationId);
+}
+export function deleteUser(userId: number) {
   const result = db.prepare(`DELETE FROM users WHERE user_id = ?`).run(userId);
 
   return result.changes;
 }
-  

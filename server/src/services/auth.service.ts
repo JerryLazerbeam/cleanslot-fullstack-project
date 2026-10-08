@@ -1,4 +1,5 @@
 import db from "../database";
+import { verifyPassword } from "./password.service";
 
 export function loginUser(username: string, password: string) {
   const user = db
@@ -20,7 +21,7 @@ export function loginUser(username: string, password: string) {
   if (!user) {
     return null;
   }
-  if (user.password !== password) {
+  if (!verifyPassword(password, user.password)) {
     return null;
   }
   return user;
