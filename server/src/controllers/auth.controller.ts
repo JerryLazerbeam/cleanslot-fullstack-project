@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import { loginUser } from "../services/auth.service";
 
 export function login(req: Request, res: Response) {
-  const { username, password } = req.body;
+  const { username, password } = req.body ?? {};
+
+  if (typeof username !== "string" || typeof password !== "string") {
+    return res.status(400).json({
+      message: "Användarnamn och lösenord krävs",
+    });
+  }
 
   const user = loginUser(username, password);
 
@@ -11,10 +17,18 @@ export function login(req: Request, res: Response) {
       message: "Fel användarnamn eller lösenord",
     });
   }
-  req.session.userId = user.user_id;
-  return res.json({
-    message: "Inloggning lyckades",
-    role: user.role,
+
+  req.session.regenerate((err) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Något gick fel, kunde inte logga in" });
+    }
+    req.session.userId = user.user_id;
+    return res.json({
+      message: "Inloggning lyckades",
+      role: user.role,
+    });
   });
 }
 export function logout(req: Request, res: Response) {
@@ -24,7 +38,7 @@ export function logout(req: Request, res: Response) {
         message: "Kunde inte logga ut",
       });
     }
-
+    res.clearCookie("cleanslot.sid");
     res.json({
       message: "Utloggning lyckades",
     });

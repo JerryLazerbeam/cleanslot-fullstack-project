@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import session from "express-session";
@@ -22,11 +23,21 @@ app.use(
 );
 app.use(express.json());
 
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  throw new Error("SESSION_SECRET saknas i .env");
+}
 app.use(
   session({
-    secret: "clean-slot-key",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
+    name: "cleanslot.sid",
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
   }),
 );
 
