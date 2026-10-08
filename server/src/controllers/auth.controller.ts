@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import { loginUser } from "../services/auth.service";
 
 export function login(req: Request, res: Response) {
-  const { username, password } = req.body;
+  const { username, password } = req.body ?? {};
+
+  if (typeof username !== "string" || typeof password !== "string") {
+    return res.status(400).json({
+      message: "Använarnamn och lösenord krävs",
+    });
+  }
 
   const user = loginUser(username, password);
 
